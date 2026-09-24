@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page_inscription">
+    <div class="inscription_container">
+        <form id="form_inscription">
+            <fieldset class="inscription">
+                <legend>Formulaire d'inscription</legend>
+                <div class="champ_inscription">
+                    <label for="id_nom">Nom <label for="id_asterisque" id="asterisque">*</label>:</label></label><input type="text" name="nom" id="id_nom" placeholder="Nom"><br>
+                </div>
+                <div class="champ_inscription">
+                    <label for="id_prenom">Prénom <label for="id_asterisque" id="asterisque">*</label>:</label><input type="text" name="prenom" id="id_prenom" placeholder="Prénom"><br>
+                </div>
+                <div class="champ_inscription">
+                    <label for="id_mail">Adresse mail <label for="id_asterisque" id="asterisque">*</label>:</label><input type="email" name="login" id="id_mail" placeholder="nom@domaine.com" required size="20"><br>
+                </div>
+                <div class="champ_inscription">
+                    <label for="id_tel">Numéro de téléphone :</label><input type="phone" name="phone" id="id_phone" size="20"><br>
+                </div>
+                <div class="champ_inscription">
+                    <label for="id_pass">Mot de passe <label for="id_asterisque" id="asterisque">*</label>:</label><input type="password" name="pass" id="id_pass" required size="10" oncut="return false;" oncopy="return false;"><br>
+                </div>
+                <div class="champ_inscription">
+                    <label for="id_pass_confirm">Confirmer le mot de passe :</label><input type="password" name="pass" id="id_pass" required size="10"><br>
+                </div>
+                <p id="message" class=""></p>
+                <p id="text_nouv">Vous êtes déjà inscrit ? Alors connectez-vous <a href="connexion.html">ici</a></p>
+                <label class="text_info">
+                    (
+                        <label id="asterisque">*</label>
+                    ) = Obligatoire
+                </label>
+                <input type="submit" name="connect" value="Inscription">
+            </fieldset>
+        </form>
+    </div>
+    
+</body>
+</html>
