@@ -37,19 +37,6 @@
     box-sizing: border-box;
 }
 
-.champ_inscription {
-    display: grid;
-    grid-template-columns: 120px minmax(1fr, 2fr);
-    gap: 5px;
-    padding: 5px;
-}
-
-.champ_inscription input {
-    width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-}
-
 
 legend {
     padding: 4px 10px;
@@ -79,9 +66,7 @@ input[type="submit"] {
     color: red;
 }
 
-.text_info {
-    font-size: 10px;
-}
+/* ---------- Page d'inscription ---------- */
 
 .page_inscription {
     margin: 0;
@@ -95,16 +80,116 @@ input[type="submit"] {
     background: radial-gradient(closest-side, #000680, #000000,#00056c);
 }
 
-.inscription {
-    width: 600px;
-    max-width: 90%;
+.inscription_container {
+    width: 100%;
+    padding: 20px;
     box-sizing: border-box;
+}
 
-    padding: 30px;
-    border: solid #000000;
-    border-radius: 10px;
+.inscription {
+    width: 460px;
+    max-width: 100%;
+    box-sizing: border-box;
     margin: auto;
-    font-weight: bold;
+    padding: 32px;
 
+    border-radius: 12px;
     background-color: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.inscription h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    color: #000680;
+}
+
+.inscription .sous_titre {
+    margin: 4px 0 20px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.ligne_inscription {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.champ_inscription {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 14px;
+}
+
+.champ_inscription label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.champ_inscription input {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 10px;
+
+    font-family: inherit;
+    font-size: 0.95rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.champ_inscription input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.inscription input[type="submit"] {
+    display: block;
+    width: 100%;
+    margin: 6px 0 0;
+    padding: 12px;
+
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.inscription input[type="submit"]:hover {
+    background-color: #0062cc;
+}
+
+.asterisque {
+    color: red;
+}
+
+.inscription .text_info {
+    margin: 10px 0 0;
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.inscription #text_nouv {
+    margin: 16px 0 0;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.inscription #text_nouv a {
+    color: #007bff;
+    font-weight: bold;
+}
+
+@media (max-width: 480px) {
+    .ligne_inscription {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .inscription {
+        padding: 24px;
+    }
 }
