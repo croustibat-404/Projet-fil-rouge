@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="img/logo.png">
+</head>
+<body class="page_inscription">
+    <div class="inscription_container">
+        <form id="form_inscription" class="inscription">
+            <h1>Créer un compte</h1>
+            <p class="sous_titre">Remplissez le formulaire pour vous inscrire.</p>
+
+            <div class="ligne_inscription">
+                <div class="champ_inscription">
+                    <label for="id_nom">Nom <span class="asterisque">*</span></label>
+                    <input type="text" name="nom" id="id_nom" placeholder="Nom" required>
+                </div>
+                <div class="champ_inscription">
+                    <label for="id_prenom">Prénom <span class="asterisque">*</span></label>
+                    <input type="text" name="prenom" id="id_prenom" placeholder="Prénom" required>
+                </div>
+            </div>
+
+            <div class="champ_inscription">
+                <label for="id_mail">Adresse mail <span class="asterisque">*</span></label>
+                <input type="email" name="login" id="id_mail" placeholder="nom@domaine.com" required>
+            </div>
+
+            <div class="champ_inscription">
+                <label for="id_phone">Numéro de téléphone</label>
+                <input type="tel" name="phone" id="id_phone" placeholder="Facultatif">
+            </div>
+
+            <div class="champ_inscription">
+                <label for="id_pass">Mot de passe <span class="asterisque">*</span></label>
+                <input type="password" name="pass" id="id_pass" required oncut="return false;" oncopy="return false;">
+            </div>
+
+            <div class="champ_inscription">
+                <label for="id_pass_confirm">Confirmer le mot de passe <span class="asterisque">*</span></label>
+                <input type="password" name="pass_confirm" id="id_pass_confirm" required>
+            </div>
+
+            <p id="message" class=""></p>
+
+            <input type="submit" name="connect" value="S'inscrire">
+
+            <p class="text_info"><span class="asterisque">*</span> Champ obligatoire</p>
+            <p id="text_nouv">Vous êtes déjà inscrit ? <a href="connexion.html">Connectez-vous</a></p>
+        </form>
+    </div>
+</body>
+</html>

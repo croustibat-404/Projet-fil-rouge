@@ -193,3 +193,76 @@ input[type="submit"] {
         padding: 24px;
     }
 }
+
+article {
+    display: flex;
+    height: 95vh;
+}
+
+.accueil {
+    border: solid 1px black;
+}
+
+.entete {
+    display: flex;
+    align-items: center;
+    height: 90px;
+    padding: 0 20px;
+    border-bottom: 2px solid black;
+    box-sizing: border-box;
+}
+
+.colonne_conversations {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    flex-shrink: 0;
+    border-right: 1px solid #000000;
+    min-height: 0;
+}
+
+.liste_conversations {
+    list-style: none;
+}
+
+.conversation {
+    display: flex;
+    align-items: center;
+    height: 70px;
+    width: 30vh;
+    padding: 0 20px;
+    border-bottom: 1px solid #000000;
+    cursor: pointer;
+}
+
+.conversation:hover {
+    background-color: rgba(2, 59, 145, 0.397);
+}
+
+.colonne_discussion {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    border-left: solid 1px black;
+    min-width: 0;
+    min-height: 0;
+}
+
+.zone_messages {
+    flex: 1;
+    padding: 20px;
+}
+
+.avatar {
+    border-radius: 50%;
+    border: solid 2px black;
+    height: 60px;
+    width: 60px;
+}
+
+.petit_avatar {
+    border-radius: 50%;
+    border: solid 2px black;
+    height: 35px;
+    width: 35px;
+}
