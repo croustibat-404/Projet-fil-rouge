@@ -212,17 +212,21 @@ article {
     box-sizing: border-box;
 }
 
-.colonne_conversations {
+.colonne_conversation {
     display: flex;
     flex-direction: column;
-    width: 500px;
-    flex-shrink: 0;
+    width: 240px;
+    flex-shrink: 2;
     border-right: 1px solid #000000;
     min-height: 0;
 }
 
-.liste_conversations {
+.liste_conversation {
     list-style: none;
+    flex: 1;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
 }
 
 .conversation {
@@ -248,7 +252,7 @@ article {
     min-height: 0;
 }
 
-.zone_messages {
+.zone_message {
     flex: 1;
     padding: 20px;
 }
