@@ -270,10 +270,3 @@ article {
     height: 35px;
     width: 35px;
 }
-
-.petit_avatar_bis {
-    border-radius: 50%;
-    border: solid 2px rgb(0, 183, 255);
-    height: 40px;
-    width: 40px;
-}
