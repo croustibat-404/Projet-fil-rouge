@@ -1,3 +1,21 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: "Gill Sans", sans-serif;
+}
+
 .page_connexion {
     margin: 0;
     min-height: 100vh;
@@ -196,7 +214,8 @@ input[type="submit"] {
 
 article {
     display: flex;
-    height: 82vh;
+    flex: 1;
+    min-height: 0;
 }
 
 .entete {
@@ -206,6 +225,30 @@ article {
     padding: 0 20px;
     border-bottom: 2px solid black;
     box-sizing: border-box;
+}
+
+.entete_conversation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bouton_menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: #0081c7;
+}
+
+.bouton_menu:hover {
+    background-color: rgba(0, 129, 199, 0.1);
 }
 
 .colonne_conversation {
@@ -280,10 +323,59 @@ article {
     box-shadow: 0 0 0 3px rgb(255, 255, 255), 0 0 0 5px rgb(0, 217, 255);
 }
 
+.nouvelle_conversation {
+    display: block;
+    height: 40px;
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #007bff;
+    border-radius: 8px;
+    align-self: center;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
 
+.nouvelle_conversation:hover {
+    background-color: #0056b3;
+}
 
+.nouvelle_conversation:active {
+    outline: none;
+    background-color: #004085;
+}
 
-footer {
-    height: 14vh;
-    background-color: #00056c;
+.zone_message {
+    display: flex;
+    align-items: end; 
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+
+.champ_message {
+    flex: 1;
+    height: 40px;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.bouton_envoyer {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    background-color: #ffffff; 
+    border: 1px solid #ccc;    
+    cursor: pointer;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.bouton_envoyer:hover {
+    background-color: #f0f0f0;
 }

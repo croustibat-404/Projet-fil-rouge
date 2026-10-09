@@ -6,53 +6,30 @@
     <title>Accueil FIL ROUGE</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <article class="accueil">
         <aside class="colonne_conversation">
             <div class="entete entete_conversation">
                 <div class="avatar"></div>
-                <button class="bouton_menu"></button>
+                <button class="bouton_menu" title="Paramètres du compte"><i class="fa-solid fa-gear"></i></button>
             </div>
             <ul class="liste_conversation">
-                <li class="conversation">
-                    <div class="petit_avatar"></div>
-                </li>
-                <li class="conversation">
-                    <div class="petit_avatar"></div>
-                </li>
-                <li class="conversation">
-                    <div class="petit_avatar story"></div>
-                </li>
-                <li class="conversation">
-                    <div class="petit_avatar story"></div>
-                </li>
-                <li class="conversation">
-                    <div class="petit_avatar"></div>
-                </li>
-                <li class="conversation">
-                    <div class="petit_avatar"></div>
-                </li>
-                <li class="conversation">
-                    <div class="petit_avatar story"></div>
-                </li>
-                <li class="conversation">
-                    <div class="petit_avatar"></div>
-                </li>
-                
-                
-
             </ul>
+            <button class="nouvelle_conversation">Nouvelle conversation</button>
         </aside>
         <section class="colonne_discussion">
             <div class="entete entete_discussion">
-
+                <div class="avatar"></div>
+                </div>
             </div>
-            <div class="zone_message"></div>
+            <div class="zone_message">
+                <input type="text" class="champ_message" placeholder="Écrire un message...">
+                
+                <button type="submit" class="bouton_envoyer"><i class="fa-regular fa-paper-plane" style="color: #0081c7;"></i></button>
+            </div>
         </section>
     </article>
-    <footer>
-        <p>Test</p>
-    </footer>
 </body>
 </html>
