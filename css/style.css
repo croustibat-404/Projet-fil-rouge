@@ -1,19 +1,21 @@
-* {
-    box-sizing: border-box;
-}
-
 html, body {
     margin: 0;
     padding: 0;
-    width: 100%;
-    min-height: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 body {
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     font-family: "Gill Sans", sans-serif;
+}
+
+article {
+    display: flex;
+    flex: 1;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .page_connexion {
@@ -212,12 +214,6 @@ input[type="submit"] {
     }
 }
 
-article {
-    display: flex;
-    flex: 1;
-    min-height: 0;
-}
-
 .entete {
     display: flex;
     align-items: center;
@@ -225,12 +221,14 @@ article {
     padding: 0 20px;
     border-bottom: 2px solid black;
     box-sizing: border-box;
+    flex-shrink: 0;
 }
 
 .entete_conversation {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .bouton_menu {
@@ -291,11 +289,6 @@ article {
     min-height: 0;
 }
 
-.zone_message {
-    flex: 1;
-    padding: 20px;
-}
-
 #message {
     color: red;
 }
@@ -306,6 +299,16 @@ article {
     height: 60px;
     width: 60px;
     box-shadow: 0 0 0 3px rgb(255, 255, 255), 0 0 0 5px rgb(0, 217, 255);
+    overflow: hidden; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .petit_avatar {
@@ -347,15 +350,16 @@ article {
 }
 
 .zone_message {
+    flex: 1;
+    padding: 20px;
     display: flex;
     align-items: end; 
     padding: 10px;
-    border-top: 1px solid #ccc;
 }
 
 .champ_message {
     flex: 1;
-    height: 40px;
+    height: 18px;
     padding: 10px;
     margin-right: 10px;
     border: 1px solid #ccc;
@@ -378,4 +382,68 @@ article {
 
 .bouton_envoyer:hover {
     background-color: #f0f0f0;
+}
+
+.liste_message {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 20px;
+    gap: 18px;
+    overflow-y: auto;
+}
+
+.message {
+    display: flex;
+    width: 100%;
+}
+
+.message.envoye {
+    justify-content: flex-end;
+}
+
+.message.recu {
+    justify-content: flex-start;
+}
+
+.bulle_message {        
+    max-width: 40%;
+    padding: 10px 15px;
+    border-radius: 16px;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+
+    display: flex;
+    flex-direction: column; 
+    gap: 4px;
+}
+
+.envoye .bulle_message {
+    background-color: #0081c7;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.recu .bulle_message {
+    background-color: #e5e5ea;
+    color: #222;
+    border-bottom-left-radius: 4px;
+}
+
+.texte_message {
+    width: 100%;
+}
+
+.heure_message {
+    font-size: 0.7rem;
+    align-self: flex-end;
+    opacity: 0.8;
+}
+
+.envoye .heure_message {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.recu .heure_message {
+    color: #666;
 }

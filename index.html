@@ -24,12 +24,21 @@
                 <div class="avatar"></div>
                 </div>
             </div>
-            <div class="zone_message">
-                <input type="text" class="champ_message" placeholder="Écrire un message...">
-                
-                <button type="submit" class="bouton_envoyer"><i class="fa-regular fa-paper-plane" style="color: #0081c7;"></i></button>
+
+            <div class="liste_message" id="liste_message">
             </div>
+
+            <form class="zone_message" id="formulaire-message">
+                <input type="text" class="champ_message" id="champ-message" placeholder="Écrire un message..." autocomplete="off">
+
+                <button type="submit" class="bouton_envoyer"
+                        aria-label="Envoyer le message">
+                    <i class="fa-regular fa-paper-plane"
+                        style="color: #0081c7;"></i>
+                </button>
+            </form>
         </section>
     </article>
+    <script src="js/script.js"></script> 
 </body>
 </html>
