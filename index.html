@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,7 +22,7 @@
         <section class="colonne_discussion">
             <div class="entete entete_discussion">
                 <div class="avatar"></div>
-                </div>
+                <span class="nom_contact" id="nom-contact">Contact</span>
             </div>
 
             <div class="liste_message" id="liste_message">
@@ -31,10 +31,9 @@
             <form class="zone_message" id="formulaire-message">
                 <input type="text" class="champ_message" id="champ-message" placeholder="Écrire un message..." autocomplete="off">
 
-                <button type="submit" class="bouton_envoyer"
-                        aria-label="Envoyer le message">
-                    <i class="fa-regular fa-paper-plane"
-                        style="color: #0081c7;"></i>
+                <button type="submit" class="bouton_envoyer" id="bouton-envoyer"
+                        aria-label="Envoyer le message" disabled>
+                    <i class="fa-regular fa-paper-plane"></i>
                 </button>
             </form>
         </section>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 const REGEX_MAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -81,9 +82,18 @@ if (formInscription) {
 }
 
 
+=======
+>>>>>>> c1eee171c590d3ad8757c42c3ea23e2c16eda461
 const formulaire = document.getElementById("formulaire-message");
 const champMessage = document.getElementById("champ-message");
 const listeMessages = document.getElementById("liste_message");
+const boutonEnvoyer = document.getElementById("bouton-envoyer");
+
+function mettreAJourBoutonEnvoyer() {
+    boutonEnvoyer.disabled = champMessage.value.trim() === "";
+}
+
+champMessage.addEventListener("input", mettreAJourBoutonEnvoyer);
 
 function ajouterMessage(texte, type) {
 
@@ -114,9 +124,27 @@ function ajouterMessage(texte, type) {
     listeMessages.scrollTop = listeMessages.scrollHeight;
 }
 
+<<<<<<< HEAD
 if (formulaire) {
     formulaire.addEventListener("submit", function (event) {
         event.preventDefault();
+=======
+formulaire.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const texte = champMessage.value.trim();
+
+    if (texte === "") {
+        return;
+    }
+
+    ajouterMessage(texte, "envoye");
+
+    champMessage.value = "";
+    mettreAJourBoutonEnvoyer();
+    champMessage.focus();
+});
+>>>>>>> c1eee171c590d3ad8757c42c3ea23e2c16eda461
 
         const texte = champMessage.value.trim();
 

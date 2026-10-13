@@ -305,6 +305,12 @@ input[type="submit"] {
     align-items: center;
 }
 
+.nom_contact {
+    margin-left: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
 .avatar img {
     width: 100%;
     height: 100%;
@@ -380,8 +386,17 @@ input[type="submit"] {
     flex-shrink: 0;
 }
 
-.bouton_envoyer:hover {
+.bouton_envoyer i {
+    color: #0081c7;
+}
+
+.bouton_envoyer:hover:not(:disabled) {
     background-color: #f0f0f0;
+}
+
+.bouton_envoyer:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
 }
 
 .liste_message {
