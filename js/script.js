@@ -1,6 +1,13 @@
 const formulaire = document.getElementById("formulaire-message");
 const champMessage = document.getElementById("champ-message");
 const listeMessages = document.getElementById("liste_message");
+const boutonEnvoyer = document.getElementById("bouton-envoyer");
+
+function mettreAJourBoutonEnvoyer() {
+    boutonEnvoyer.disabled = champMessage.value.trim() === "";
+}
+
+champMessage.addEventListener("input", mettreAJourBoutonEnvoyer);
 
 function ajouterMessage(texte, type) {
 
@@ -43,6 +50,7 @@ formulaire.addEventListener("submit", function (event) {
     ajouterMessage(texte, "envoye");
 
     champMessage.value = "";
+    mettreAJourBoutonEnvoyer();
     champMessage.focus();
 });
 
