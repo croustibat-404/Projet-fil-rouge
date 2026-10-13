@@ -1,28 +1,85 @@
-console.log("Bonjour");
 
-/*
-const courriel = document.querySelector("#id_mail");
-const courrielMessage = document.querySelector("#message");
+const REGEX_MAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-console.log(courriel.value);
+function mailValide(mail) {
+    return REGEX_MAIL.test(mail);
+}
 
-courriel.addEventListener("input", function(event) {
-    const valeur = courriel.value;
+function verifierMotDePasse(mdp) {
+    const manques = [];
 
-    const estvide = valeur === "";
-    const aUnArobase = valeur.includes("@");
+    if (mdp.length < 12) manques.push("12 caractères minimum");
+    if (!/\p{Ll}/u.test(mdp)) manques.push("une minuscule");
+    if (!/\p{Lu}/u.test(mdp)) manques.push("une majuscule");
+    if (!/\d/.test(mdp)) manques.push("un chiffre");
+    if (!/[^\p{L}\p{N}\s]/u.test(mdp)) manques.push("un caractère spécial");
 
-    console.log("Courriel : ", valeur);
+    return manques;
+}
 
-    if (estvide){
-        courrielMessage.textContent = "Le courriel est vide";
-    } else if (!aUnArobase) {
-        courrielMessage.textContent = "Le courriel n'est pas valide";
-    } else {
-        courrielMessage.textContent = "Tout semble correct";
-    }
-});
-*/
+const message = document.getElementById("message");
+
+function afficherErreur(texte) {
+    message.textContent = texte;
+    message.className = "erreur";
+}
+
+const formConnexion = document.getElementById("form_connexion");
+
+if (formConnexion) {
+    formConnexion.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const mail = document.getElementById("id_mail").value.trim();
+        const mdp = document.getElementById("id_pass").value;
+
+        if (!mailValide(mail)) {
+            event.preventDefault();
+            afficherErreur("L'adresse mail n'est pas valide.");
+            return;
+        }
+
+        if (mdp === "") {
+            event.preventDefault();
+            afficherErreur("Veuillez saisir votre mot de passe.");
+            return;
+        }
+
+        message.textContent = "";
+    });
+}
+
+const formInscription = document.getElementById("form_inscription");
+
+if (formInscription) {
+    formInscription.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const mail = document.getElementById("id_mail").value.trim();
+        const mdp = document.getElementById("id_pass").value;
+        const confirmation = document.getElementById("id_pass_confirm").value;
+
+        if (!mailValide(mail)) {
+            event.preventDefault();
+            afficherErreur("L'adresse mail n'est pas valide.");
+            return;
+        }
+
+        const manques = verifierMotDePasse(mdp);
+        if (manques.length > 0) {
+            event.preventDefault();
+            afficherErreur("Mot de passe invalide, il manque : " + manques.join(", ") + ".");
+            return;
+        }
+
+        if (mdp !== confirmation) {
+            event.preventDefault();
+            afficherErreur("Les deux mots de passe ne sont pas identiques.");
+            return;
+        }
+
+        message.textContent = "";
+    });
+}
+
 
 const formulaire = document.getElementById("formulaire-message");
 const champMessage = document.getElementById("champ-message");
@@ -57,21 +114,19 @@ function ajouterMessage(texte, type) {
     listeMessages.scrollTop = listeMessages.scrollHeight;
 }
 
-formulaire.addEventListener("submit", function (event) {
-    event.preventDefault();
+if (formulaire) {
+    formulaire.addEventListener("submit", function (event) {
+        event.preventDefault();
 
-    const texte = champMessage.value.trim();
+        const texte = champMessage.value.trim();
 
-    if (texte === "") {
-        return;
-    }
+        if (texte === "") {
+            return;
+        }
 
-    ajouterMessage(texte, "envoye");
+        ajouterMessage(texte, "envoye");
 
-    champMessage.value = "";
-    champMessage.focus();
-});
-
-
-
-
+        champMessage.value = "";
+        champMessage.focus();
+    });
+}
