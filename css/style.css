@@ -380,6 +380,10 @@ input[type="submit"] {
     flex-shrink: 0;
 }
 
+.bouton_envoyer i {
+    color: #0081c7;
+}
+
 .bouton_envoyer:hover {
     background-color: #f0f0f0;
 }
