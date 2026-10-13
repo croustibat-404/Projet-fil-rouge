@@ -90,8 +90,9 @@ function mettreAJourBoutonEnvoyer() {
     boutonEnvoyer.disabled = champMessage.value.trim() === "";
 }
 
-champMessage.addEventListener("input", mettreAJourBoutonEnvoyer);
-
+if (champMessage) {
+    champMessage.addEventListener("input", mettreAJourBoutonEnvoyer);
+}
 function ajouterMessage(texte, type) {
 
     const ligne = document.createElement("div");
@@ -114,27 +115,43 @@ function ajouterMessage(texte, type) {
     heureSpan.classList.add("heure_message");
     heureSpan.textContent = heureFormatee;
     bulle.appendChild(heureSpan);
-
     ligne.appendChild(bulle);
     listeMessages.appendChild(ligne);
 
     listeMessages.scrollTop = listeMessages.scrollHeight;
 }
 
-formulaire.addEventListener("submit", function (event) {
-    event.preventDefault();
+if(formulaire){
+    formulaire.addEventListener("submit", function (event) {
+        event.preventDefault();
 
-    const texte = champMessage.value.trim();
+        const texte = champMessage.value.trim();
 
-    if (texte === "") {
-        return;
-    }
+        if (texte === "") {
+            return;
+        }
 
-    ajouterMessage(texte, "envoye");
+        ajouterMessage(texte, "envoye");
 
-    champMessage.value = "";
-    mettreAJourBoutonEnvoyer();
-    champMessage.focus();
+        champMessage.value = "";
+        mettreAJourBoutonEnvoyer();
+        champMessage.focus();
 
     });
+}
 
+const reglages = document.querySelector(".bouton_menu");
+
+if(reglages) {
+    reglages.addEventListener("click", function () {
+        window.location.href = "parametres.html";
+    });
+}
+
+const quitter = document.querySelector(".bouton_quitter");
+
+if(quitter) {
+    quitter.addEventListener("click", function () {
+        window.location.href = "index.html";
+    });
+}
