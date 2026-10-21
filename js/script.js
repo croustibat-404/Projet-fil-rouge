@@ -1,27 +1,81 @@
+const message = document.getElementById("message");
+
+function afficherErreur(texte) {
+    message.textContent = texte;
+    message.className = "erreur";
+}
+
+function afficherSucces(texte) {
+    message.textContent = texte;
+    message.className = "succes";
+}
 
 const REGEX_MAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const REGEX_PSEUDO = /^[A-Za-z0-9_.-]{3,20}$/;
 
 function mailValide(mail) {
     return REGEX_MAIL.test(mail);
 }
 
 function verifierMotDePasse(mdp) {
-    const manques = [];
+    let aMinuscule = false;
+    let aMajuscule = false;
+    let aChiffre = false;
+    let aSpecial = false;
 
-    if (mdp.length < 12) manques.push("12 caractères minimum");
-    if (!/\p{Ll}/u.test(mdp)) manques.push("une minuscule");
-    if (!/\p{Lu}/u.test(mdp)) manques.push("une majuscule");
-    if (!/\d/.test(mdp)) manques.push("un chiffre");
-    if (!/[^\p{L}\p{N}\s]/u.test(mdp)) manques.push("un caractère spécial");
-
-    return manques;
+    for (let lettre of mdp) {
+        if ("0123456789".includes(lettre)) {
+            aChiffre = true;                        
+        } else if (lettre !== lettre.toUpperCase()) {
+            aMinuscule = true;                      
+        } else if (lettre !== lettre.toLowerCase()) {
+            aMajuscule = true;                      
+        } else if (lettre !== " ") {
+            aSpecial = true;                        
+        }
+    }
+    if (mdp.length < 12) {
+        return "Le mot de passe doit faire au moins 12 caractères.";
+    }
+    if (!aMinuscule) {
+        return "Le mot de passe doit contenir une minuscule.";
+    }
+    if (!aMajuscule) {
+        return "Le mot de passe doit contenir une majuscule.";
+    }
+    if (!aChiffre) {
+        return "Le mot de passe doit contenir un chiffre.";
+    }
+    if (!aSpecial) {
+        return "Le mot de passe doit contenir un caractère spécial (! ? # @ ...).";
+    }
+    return "";  
 }
 
-const message = document.getElementById("message");
+const pageActuelle = window.location.pathname.split("/").pop() || "index.html";
+const pagePublique = pageActuelle === "connexion.html" || pageActuelle === "inscription.html";
 
-function afficherErreur(texte) {
-    message.textContent = texte;
-    message.className = "erreur";
+async function verifierSession() {
+    const { data } = await supabaseClient.auth.getSession();
+    const estConnecte = data.session !== null;
+
+    if (!estConnecte && !pagePublique) {
+        window.location.href = "connexion.html";
+    } else if (estConnecte && pagePublique) {
+        window.location.href = "index.html";
+    }
+}
+
+verifierSession();
+
+async function assurerProfil(user) {
+    const { data } = await supabaseClient.from("profiles").select("id").eq("id", user.id);
+
+    if (data && data.length === 0) {
+        await supabaseClient.from("profiles").insert([
+            { id: user.id, pseudo: user.user_metadata.pseudo }
+        ]);
+    }
 }
 
 const formConnexion = document.getElementById("form_connexion");
