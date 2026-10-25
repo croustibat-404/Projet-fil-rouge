@@ -17,6 +17,10 @@ function mailValide(mail) {
     return REGEX_MAIL.test(mail);
 }
 
+function pseudoValide(pseudo) {
+    return REGEX_PSEUDO.test(pseudo);
+}
+
 function verifierMotDePasse(mdp) {
     let aMinuscule = false;
     let aMajuscule = false;
@@ -105,30 +109,51 @@ if (formConnexion) {
 const formInscription = document.getElementById("form_inscription");
 
 if (formInscription) {
-    formInscription.addEventListener("submit", function (event) {
+    formInscription.addEventListener("submit", async function (event) {
         event.preventDefault();
         const mail = document.getElementById("id_mail").value.trim();
         const mdp = document.getElementById("id_pass").value;
         const confirmation = document.getElementById("id_pass_confirm").value;
+        const pseudo = document.getElementById("id_pseudo").value.trim().toLowerCase();
+        const nom = document.getElementById("id_nom").value.trim();
+        const prenom = document.getElementById("id_prenom").value.trim();
+        const phone = document.getElementById("id_phone").value.trim();
+
+
+        if (!pseudoValide(pseudo)) {
+            afficherErreur("Le pseudo n'est pas valide");
+            return;
+        }
 
         if (!mailValide(mail)) {
-            event.preventDefault();
             afficherErreur("L'adresse mail n'est pas valide.");
             return;
         }
 
         const manques = verifierMotDePasse(mdp);
         if (manques.length > 0) {
-            event.preventDefault();
-            afficherErreur("Mot de passe invalide, il manque : " + manques.join(", ") + ".");
+            afficherErreur("Mot de passe invalide : " + manques);
             return;
         }
 
         if (mdp !== confirmation) {
-            event.preventDefault();
             afficherErreur("Les deux mots de passe ne sont pas identiques.");
             return;
         }
+        
+        const { data, error } = await supabaseClient    
+        .from("profiles")
+        .select("id")
+        .eq("pseudo",pseudo);
+
+        if (error !== null){
+            afficherErreur("Impossible de vérifier le pseudo, veuillez réessayer.");
+            return;
+        } else if (data.length > 0) {
+            afficherErreur("Ce pseudo est déjà pris.");
+            return;
+        }
+
 
         message.textContent = "";
     });
