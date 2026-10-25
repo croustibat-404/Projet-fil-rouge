@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 html, body {
     margin: 0;
     padding: 0;
@@ -8,7 +12,8 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
-    font-family: "Gill Sans", sans-serif;
+    font-family: "Gill Sans", "Segoe UI", sans-serif;
+    color: #222;
 }
 
 article {
@@ -18,110 +23,48 @@ article {
     overflow: hidden;
 }
 
-.page_connexion {
-    margin: 0;
-    min-height: 100vh;
-    font-family: "Gill Sans", sans-serif;
+/* ---------- Connexion / Inscription ---------- */
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: radial-gradient(closest-side, #000680, #000000,#00056c);
-}
-
-.connexion {
-    width: 500px;
-    max-width: 100%;
-    box-sizing: border-box;
-    box-shadow: 0 0 0 2px blue;
-    padding: 30px;
-    border: solid 6px #ffffff;
-    border-radius: 10px;
-    margin: auto;
-    font-weight: bold;
-    background-color: rgb(196, 202, 251);
-}
-
-.champ {
-    display: grid;
-    grid-template-columns: 120px minmax(0, 1fr);
-    gap: 5px;
-    padding: 5px;
-}
-
-.champ input {
-    width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-}
-
-
-legend {
-    padding: 4px 10px;
-    font-size: 1.3rem;
-    font-weight: bold;
-    background-color: rgb(196, 202, 251);
-    border-radius: 5px;
-    border-top: solid 6px white;
-    border-right: solid 6px white;
-    border-left: solid 6px white;
-}
-
-input[type="email"] {
-    background-color: rgb(255, 255, 255);
-}
-
-input[type="submit"] {
-    display: flex;
-    border: solid black;
-    background-color: #007bff;
-    color: white;
-    font-family: "Gill Sans", sans-serif;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 5px;
-    margin-left: auto;
-}
-
-#asterisque {
-    color: red;
-}
-
+.page_connexion,
 .page_inscription {
-    margin: 0;
     min-height: 100vh;
-    font-family: "Gill Sans", sans-serif;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
-    background: radial-gradient(closest-side, #000680, #000000,#00056c);
+    background: radial-gradient(closest-side, #000680, #000000, #00056c);
 }
 
+.connexion_container,
 .inscription_container {
     width: 100%;
     padding: 20px;
-    box-sizing: border-box;
 }
 
+.connexion,
 .inscription {
     width: 460px;
     max-width: 100%;
-    box-sizing: border-box;
     margin: auto;
-    padding: 32px;
-
+    padding: 30px;
+    border: none;
     border-radius: 12px;
     background-color: white;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
+legend,
 .inscription h1 {
     margin: 0;
+    padding: 0;
     font-size: 1.6rem;
+    font-weight: bold;
     color: #000680;
+}
+
+legend {
+    float: left;
+    width: 100%;
+    margin-bottom: 20px;
 }
 
 .inscription .sous_titre {
@@ -130,75 +73,95 @@ input[type="submit"] {
     color: #666;
 }
 
-.ligne_inscription {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-
+.champ,
 .champ_inscription {
+    clear: both;
     display: flex;
     flex-direction: column;
     gap: 4px;
     margin-bottom: 14px;
 }
 
+.champ br {
+    display: none;
+}
+
+.ligne_inscription {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.champ label,
 .champ_inscription label {
     font-size: 0.9rem;
     font-weight: bold;
     color: #333;
 }
 
+.champ input,
 .champ_inscription input {
     width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
     padding: 10px;
-
     font-family: inherit;
     font-size: 0.95rem;
     border: 1px solid #ccc;
     border-radius: 6px;
 }
 
+.champ input:focus,
 .champ_inscription input:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
 }
 
-.inscription input[type="submit"] {
+input[type="submit"] {
     display: block;
     width: 100%;
-    margin: 6px 0 0;
+    margin-top: 6px;
     padding: 12px;
-
     border: none;
     border-radius: 6px;
+    background-color: #007bff;
+    color: white;
+    font-family: inherit;
     font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-.inscription input[type="submit"]:hover {
+input[type="submit"]:hover {
     background-color: #0062cc;
+}
+
+#message {
+    margin: 0 0 10px;
+    font-size: 0.9rem;
+    color: red;
+}
+
+#message.succes {
+    color: green;
 }
 
 .asterisque {
     color: red;
 }
 
-.inscription .text_info {
+.text_info {
     margin: 10px 0 0;
     font-size: 0.75rem;
     color: #666;
 }
 
-.inscription #text_nouv {
-    margin: 16px 0 0;
+#text_nouv {
+    margin: 16px 0;
     font-size: 0.9rem;
     text-align: center;
 }
 
-.inscription #text_nouv a {
+#text_nouv a {
     color: #007bff;
     font-weight: bold;
 }
@@ -209,53 +172,96 @@ input[type="submit"] {
         gap: 0;
     }
 
+    .connexion,
     .inscription {
-        padding: 24px;
+        padding: 20px;
     }
 }
+
+/* ---------- Messagerie ---------- */
 
 .entete {
     display: flex;
     align-items: center;
-    height: 90px;
+    height: 80px;
     padding: 0 20px;
-    border-bottom: 2px solid black;
-    box-sizing: border-box;
+    border-bottom: 1px solid #ddd;
+    background-color: #f7f7f7;
     flex-shrink: 0;
 }
 
 .entete_conversation {
-    display: flex;
     justify-content: space-between;
-    align-items: center;
-    flex-shrink: 0;
 }
 
-.bouton_menu {
+.avatar {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: transparent;
-    border: 1px solid #ccc;
+    height: 50px;
+    width: 50px;
     border-radius: 50%;
-    height: 40px;
-    width: 40px;
-    cursor: pointer;
-    font-size: 1.1rem;
-    color: #0081c7;
+    border: solid 2px black;
+    box-shadow: 0 0 0 3px white, 0 0 0 5px rgb(0, 217, 255);
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
-.bouton_menu:hover {
-    background-color: rgba(0, 129, 199, 0.1);
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.petit_avatar,
+.story {
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    border: solid 2px black;
+}
+
+.story {
+    box-shadow: 0 0 0 3px white, 0 0 0 5px rgb(0, 217, 255);
+}
+
+.nom_contact {
+    margin-left: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.bouton_menu,
+.bouton_quitter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    background-color: white;
+    color: #0081c7;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.bouton_menu:hover,
+.bouton_quitter:hover {
+    background-color: #e6f2fa;
+}
+
+.bouton_quitter {
+    margin: 20px;
 }
 
 .colonne_conversation {
     display: flex;
     flex-direction: column;
-    width: 240px;
-    flex-shrink: 2;
-    border-right: 1px solid #000000;
+    width: 260px;
+    flex-shrink: 0;
     min-height: 0;
+    border-right: 1px solid #ddd;
 }
 
 .liste_conversation {
@@ -269,80 +275,27 @@ input[type="submit"] {
 .conversation {
     display: flex;
     align-items: center;
+    gap: 10px;
     height: 70px;
-    width: 30vh;
     padding: 0 20px;
-    border-bottom: 1px solid #000000;
+    border-bottom: 1px solid #eee;
     cursor: pointer;
 }
 
 .conversation:hover {
-    background-color: rgba(2, 59, 145, 0.397);
-}
-
-.colonne_discussion {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    border-left: solid 1px black;
-    min-width: 0;
-    min-height: 0;
-}
-
-#message {
-    color: red;
-}
-
-.avatar {
-    border-radius: 50%;
-    border: solid 2px black;
-    height: 60px;
-    width: 60px;
-    box-shadow: 0 0 0 3px rgb(255, 255, 255), 0 0 0 5px rgb(0, 217, 255);
-    overflow: hidden; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.nom_contact {
-    margin-left: 15px;
-    font-size: 1.2em;
-    font-weight: bold;
-}
-
-.avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.petit_avatar {
-    border-radius: 50%;
-    border: solid 2px black;
-    height: 35px;
-    width: 35px;
-}
-
-.story {
-    border-radius: 50%;
-    border: solid 2px black;
-    height: 35px;
-    width: 35px;
-    box-shadow: 0 0 0 3px rgb(255, 255, 255), 0 0 0 5px rgb(0, 217, 255);
+    background-color: #e6f2fa;
 }
 
 .nouvelle_conversation {
-    display: block;
-    height: 40px;
-    width: 95%;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #007bff;
-    border-radius: 8px;
-    align-self: center;
-    color: white;
+    margin: 10px;
+    padding: 12px;
     border: none;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: white;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: bold;
     cursor: pointer;
 }
 
@@ -351,60 +304,24 @@ input[type="submit"] {
 }
 
 .nouvelle_conversation:active {
-    outline: none;
     background-color: #004085;
 }
 
-.zone_message {
-    flex: 1;
-    padding: 20px;
+.colonne_discussion {
     display: flex;
-    align-items: end; 
-    padding: 10px;
-}
-
-.champ_message {
+    flex-direction: column;
     flex: 1;
-    height: 18px;
-    padding: 10px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.bouton_envoyer {
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    background-color: #ffffff; 
-    border: 1px solid #ccc;    
-    cursor: pointer;
-    border-radius: 50%;
-    height: 40px;
-    width: 40px;
-    padding: 0;
-    flex-shrink: 0;
-}
-
-.bouton_envoyer i {
-    color: #0081c7;
-}
-
-.bouton_envoyer:hover:not(:disabled) {
-    background-color: #f0f0f0;
-}
-
-.bouton_envoyer:disabled {
-    cursor: not-allowed;
-    opacity: 0.4;
+    min-width: 0;
+    min-height: 0;
 }
 
 .liste_message {
     display: flex;
     flex-direction: column;
+    flex: 1;
     min-height: 0;
     padding: 20px;
-    gap: 18px;
+    gap: 10px;
     overflow-y: auto;
 }
 
@@ -421,16 +338,15 @@ input[type="submit"] {
     justify-content: flex-start;
 }
 
-.bulle_message {        
-    max-width: 40%;
+.bulle_message {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: 60%;
     padding: 10px 15px;
     border-radius: 16px;
     overflow-wrap: anywhere;
     white-space: pre-wrap;
-
-    display: flex;
-    flex-direction: column; 
-    gap: 4px;
 }
 
 .envoye .bulle_message {
@@ -450,27 +366,70 @@ input[type="submit"] {
 }
 
 .heure_message {
-    font-size: 0.7rem;
     align-self: flex-end;
+    font-size: 0.7rem;
     opacity: 0.8;
-}
-
-.envoye .heure_message {
-    color: rgba(255, 255, 255, 0.8);
 }
 
 .recu .heure_message {
     color: #666;
 }
 
-#message.succes {
-    color: green;
+.zone_message {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border-top: 1px solid #ddd;
+    flex-shrink: 0;
 }
 
-.conversation span {
-    margin-left: 12px;
+.champ_message {
+    flex: 1;
+    min-width: 0;
+    height: 40px;
+    padding: 0 15px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    border: 1px solid #ccc;
+    border-radius: 20px;
 }
 
-.conversation_active {
-    background-color: rgba(2, 59, 145, 0.397);
+.champ_message:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.bouton_envoyer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: #0081c7;
+    color: white;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.bouton_envoyer:hover:not(:disabled) {
+    background-color: #006ba6;
+}
+
+.bouton_envoyer:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+    .colonne_conversation {
+        width: 180px;
+    }
+
+    .bulle_message {
+        max-width: 80%;
+    }
 }
