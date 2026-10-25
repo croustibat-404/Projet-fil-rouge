@@ -9,7 +9,7 @@
 </head>
 <body class="page_inscription">
     <div class="inscription_container">
-        <form id="form_inscription" class="inscription" method="post" action="connexion.html">
+        <form id="form_inscription" class="inscription" method="post">
             <h1>Créer un compte</h1>
             <p class="sous_titre">Remplissez le formulaire pour vous inscrire.</p>
 
@@ -22,6 +22,11 @@
                     <label for="id_prenom">Prénom <span class="asterisque">*</span></label>
                     <input type="text" name="prenom" id="id_prenom" placeholder="Prénom" required>
                 </div>
+            </div>
+
+            <div class="champ_inscription">
+                <label for="id_pseudo">Pseudo <span class="asterisque">*</span></label>
+                <input type="text" name="pseudo" id="id_pseudo" placeholder="3 à 20 caractères" required>
             </div>
 
             <div class="champ_inscription">
@@ -52,8 +57,8 @@
             <p id="text_nouv">Vous êtes déjà inscrit ? <a href="connexion.html">Connectez-vous</a></p>
         </form>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/script.js"></script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabase.js"></script>
-<script src="js/script.js"></script> 
 </html>

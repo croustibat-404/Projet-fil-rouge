@@ -462,3 +462,15 @@ input[type="submit"] {
 .recu .heure_message {
     color: #666;
 }
+
+#message.succes {
+    color: green;
+}
+
+.conversation span {
+    margin-left: 12px;
+}
+
+.conversation_active {
+    background-color: rgba(2, 59, 145, 0.397);
+}
