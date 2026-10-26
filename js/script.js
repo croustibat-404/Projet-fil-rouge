@@ -154,8 +154,30 @@ if (formInscription) {
             return;
         }
 
+        const { data: dataInscription, error: errorInscription } = await supabaseClient.auth.signUp({
+            email: mail,
+            password: mdp,
+            options: {
+                data: {
+                    pseudo: pseudo,
+                    nom: nom,
+                    prenom: prenom,
+                    phone: phone
+                }
+            }
+        });
+
+        if (errorInscription !== null) {
+            afficherErreur("Inscription impossible : " + errorInscription.message);
+            return;
+        }
+
+        await assurerProfil(dataInscription.user);
 
         message.textContent = "";
+
+        afficherSucces("Compte créé ! Redirection...");
+        window.location.href = "./"
     });
 }
 
@@ -231,6 +253,6 @@ const quitter = document.querySelector(".bouton_quitter");
 
 if(quitter) {
     quitter.addEventListener("click", function () {
-        window.location.href = "index.html";
+        window.location.href = "./";
     });
 }
