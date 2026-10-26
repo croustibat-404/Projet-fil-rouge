@@ -177,7 +177,7 @@ if (formInscription) {
         message.textContent = "";
 
         afficherSucces("Compte créé ! Redirection...");
-        window.location.href = "./"
+        window.location.href = "./";
     });
 }
 

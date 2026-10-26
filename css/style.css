@@ -23,8 +23,6 @@ article {
     overflow: hidden;
 }
 
-/* ---------- Connexion / Inscription ---------- */
-
 .page_connexion,
 .page_inscription {
     min-height: 100vh;
@@ -178,7 +176,6 @@ input[type="submit"]:hover {
     }
 }
 
-/* ---------- Messagerie ---------- */
 
 .entete {
     display: flex;
@@ -444,4 +441,49 @@ input[type="submit"]:hover {
     .bulle_message {
         max-width: 80%;
     }
+}
+
+.parametres {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.parametres h1 {
+    margin: 0 0 20px;
+    font-size: 1.6rem;
+    color: #000680;
+}
+
+.parametres_section {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: #f7f7f7;
+}
+
+.bouton_deconnexion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #d93025;
+    color: white;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.bouton_deconnexion:hover {
+    background-color: #b3261e;
+}
+
+.bouton_deconnexion:active {
+    background-color: #8c1d18;
 }
