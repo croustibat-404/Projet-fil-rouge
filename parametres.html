@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,14 +8,116 @@
     <link rel="icon" type="image/png" href="img/logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="page_parametres">
     <button class="bouton_quitter" title="Retour à l'accueil"><i class="fa-solid fa-arrow-left"></i></button>
+
     <main class="parametres">
         <h1>Réglages du compte</h1>
+
+        <!-- ===== Profil ===== -->
         <section class="parametres_section">
+            <h2><i class="fa-solid fa-user"></i> Profil</h2>
+
+            <div class="profil_entete">
+                <div class="avatar avatar_grand" id="avatar_profil">
+                    <i class="fa-solid fa-user"></i>
+                    <img id="apercu_avatar" alt="Photo de profil">
+                </div>
+                <div>
+                    <button type="button" class="bouton_secondaire" id="bouton_avatar">
+                        <i class="fa-solid fa-camera"></i> Changer la photo
+                    </button>
+                    <input type="file" id="input_avatar" accept="image/png, image/jpeg, image/webp" hidden>
+                    <p class="text_info">PNG, JPG ou WEBP, 2 Mo maximum</p>
+                </div>
+            </div>
+
+            <form id="form_profil" novalidate>
+                <div class="ligne_inscription">
+                    <div class="champ_inscription">
+                        <label for="prenom">Prénom</label>
+                        <input type="text" id="prenom" name="prenom" autocomplete="given-name">
+                    </div>
+                    <div class="champ_inscription">
+                        <label for="nom">Nom</label>
+                        <input type="text" id="nom" name="nom" autocomplete="family-name">
+                    </div>
+                </div>
+                <div class="champ_inscription">
+                    <label for="email">Adresse courriel</label>
+                    <input type="email" id="email" name="email" readonly>
+                    <p class="text_info">L'adresse courriel ne peut pas être modifiée ici.</p>
+                </div>
+                <p class="message_formulaire" id="message_profil"></p>
+                <button type="submit" class="bouton_principal">Enregistrer</button>
+            </form>
+        </section>
+
+        <!-- ===== Mot de passe ===== -->
+        <section class="parametres_section">
+            <h2><i class="fa-solid fa-lock"></i> Mot de passe</h2>
+
+            <form id="form_mdp" novalidate>
+                <div class="champ_inscription">
+                    <label for="nouveau_mdp">Nouveau mot de passe</label>
+                    <div class="champ_mdp">
+                        <input type="password" id="nouveau_mdp" name="nouveau_mdp" autocomplete="new-password">
+                        <button type="button" class="bouton_oeil" aria-label="Afficher le mot de passe"><i class="fa-solid fa-eye"></i></button>
+                    </div>
+                    <p class="text_info">6 caractères minimum</p>
+                </div>
+                <div class="champ_inscription">
+                    <label for="confirmation_mdp">Confirmer le mot de passe</label>
+                    <div class="champ_mdp">
+                        <input type="password" id="confirmation_mdp" name="confirmation_mdp" autocomplete="new-password">
+                        <button type="button" class="bouton_oeil" aria-label="Afficher le mot de passe"><i class="fa-solid fa-eye"></i></button>
+                    </div>
+                </div>
+                <p class="message_formulaire" id="message_mdp"></p>
+                <button type="submit" class="bouton_principal">Changer le mot de passe</button>
+            </form>
+        </section>
+
+
+        <!-- ===== Session ===== -->
+        <section class="parametres_section">
+            <h2><i class="fa-solid fa-door-open"></i> Session</h2>
             <button class="bouton_deconnexion"><i class="fa-solid fa-right-from-bracket"></i> Se déconnecter</button>
         </section>
+
+        <!-- ===== Supprression du compte ===== -->
+        <section class="parametres_section zone_danger">
+            <h2><i class="fa-solid fa-triangle-exclamation"></i> Suppression du compte</h2>
+            <p class="text_info">
+                La suppression de votre compte est définitive : votre profil, vos conversations
+                et vos messages seront effacés et ne pourront pas être récupérés.
+            </p>
+            <button type="button" class="bouton_supprimer" id="ouvrir_suppression">
+                <i class="fa-solid"></i> Supprimer mon compte
+            </button>
+        </section>
     </main>
+
+    <!-- ===== Fenêtre de confirmation de suppression ===== -->
+    <dialog class="modale" id="modale_suppression" aria-labelledby="titre_suppression">
+        <div class="modale_contenu">
+            <h2 id="titre_suppression"><i class="fa-solid fa-triangle-exclamation"></i> Supprimer votre compte ?</h2>
+            <p class="modale_texte">
+                Cette action est <strong>irréversible</strong>. Toutes vos conversations
+                et tous vos messages seront supprimés.
+            </p>
+            <div class="champ_inscription">
+                <label for="confirmation_suppression">Tapez <strong>SUPPRIMER</strong> pour confirmer</label>
+                <input type="text" id="confirmation_suppression" autocomplete="off" spellcheck="false">
+            </div>
+            <p class="message_formulaire" id="message_suppression"></p>
+            <div class="modale_actions">
+                <button type="button" id="annuler_suppression">Annuler</button>
+                <button type="button" id="confirmer_suppression" disabled>Supprimer définitivement</button>
+            </div>
+        </div>
+    </dialog>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
     <script src="js/script.js"></script>
