@@ -85,24 +85,33 @@ async function assurerProfil(user) {
 const formConnexion = document.getElementById("form_connexion");
 
 if (formConnexion) {
-    formConnexion.addEventListener("submit", function (event) {
+    formConnexion.addEventListener("submit", async function (event) {
         event.preventDefault();
         const mail = document.getElementById("id_mail").value.trim();
         const mdp = document.getElementById("id_pass").value;
 
         if (!mailValide(mail)) {
-            event.preventDefault();
             afficherErreur("L'adresse mail n'est pas valide.");
             return;
         }
 
         if (mdp === "") {
-            event.preventDefault();
             afficherErreur("Veuillez saisir votre mot de passe.");
             return;
         }
 
-        message.textContent = "";
+        const { data : dataConnexion, error : errorConnexion } = await supabaseClient.auth.signInWithPassword({
+            email : mail,
+            password : mdp
+        });
+
+        if (errorConnexion !== null) {
+            afficherErreur("Adresse mail ou mot de passe incorrect.");
+            return;
+        }
+        await assurerProfil(dataConnexion.user);
+        afficherSucces("Connexion réussie !");
+        window.location.href = "./";
     });
 }
 
