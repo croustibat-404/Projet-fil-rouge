@@ -443,17 +443,10 @@ input[type="submit"]:hover {
     }
 }
 
-/* =========================================
-   Page Réglages du compte
-   ========================================= */
-
-/* html et body sont en overflow: hidden pour la messagerie :
-   on réactive le défilement pour cette page seulement. */
 body.page_parametres {
     overflow-y: auto;
 }
 
-/* Empêche le bouton retour d'être écrasé quand la page défile */
 .page_parametres .bouton_quitter {
     flex-shrink: 0;
 }
@@ -839,4 +832,14 @@ body.page_parametres {
     .modale_actions button {
         width: 100%;
     }
+}
+
+body.chargement,
+body.chargement * {
+    cursor: wait !important;
+}
+
+input[type="submit"]:disabled {
+    background-color: #9bbbe0;
+    cursor: not-allowed;
 }

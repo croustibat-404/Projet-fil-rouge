@@ -86,6 +86,7 @@ const formConnexion = document.getElementById("form_connexion");
 
 if (formConnexion) {
     formConnexion.addEventListener("submit", async function (event) {
+        message.textContent = "";
         event.preventDefault();
         const mail = document.getElementById("id_mail").value.trim();
         const mdp = document.getElementById("id_pass").value;
@@ -109,6 +110,12 @@ if (formConnexion) {
             afficherErreur("Adresse mail ou mot de passe incorrect.");
             return;
         }
+
+        const connexion = formConnexion.querySelector('input[type="submit"]');
+        connexion.disabled = true;
+        connexion.value = "Connexion en cours...";
+        document.body.classList.add("chargement");
+
         await assurerProfil(dataConnexion.user);
         afficherSucces("Connexion réussie !");
         window.location.href = "./";
@@ -119,6 +126,7 @@ const formInscription = document.getElementById("form_inscription");
 
 if (formInscription) {
     formInscription.addEventListener("submit", async function (event) {
+        message.textContent = "";
         event.preventDefault();
         const mail = document.getElementById("id_mail").value.trim();
         const mdp = document.getElementById("id_pass").value;
@@ -181,11 +189,13 @@ if (formInscription) {
             return;
         }
 
+        const inscription = formInscription.querySelector('input[type="submit"]');
+        inscription.disabled = true;
+        inscription.value = "Redirection...";
+        document.body.classList.add("chargement");
+
         await assurerProfil(dataInscription.user);
-
-        message.textContent = "";
-
-        afficherSucces("Compte créé ! Redirection...");
+        afficherSucces("Compte créé !");
         window.location.href = "./";
     });
 }
