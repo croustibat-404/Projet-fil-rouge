@@ -443,15 +443,34 @@ input[type="submit"]:hover {
     }
 }
 
+/* =========================================
+   Page Réglages du compte
+   ========================================= */
+
+/* html et body sont en overflow: hidden pour la messagerie :
+   on réactive le défilement pour cette page seulement. */
+body.page_parametres {
+    overflow-y: auto;
+}
+
+/* Empêche le bouton retour d'être écrasé quand la page défile */
+.page_parametres .bouton_quitter {
+    flex-shrink: 0;
+}
+
 .parametres {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     width: 100%;
-    max-width: 480px;
+    max-width: 560px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 20px 40px;
+    flex-shrink: 0;
 }
 
 .parametres h1 {
-    margin: 0 0 20px;
+    margin: 0;
     font-size: 1.6rem;
     color: #000680;
 }
@@ -462,6 +481,244 @@ input[type="submit"]:hover {
     border-radius: 12px;
     background-color: #f7f7f7;
 }
+
+.parametres_section h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 16px;
+    font-size: 1.1rem;
+    color: #000680;
+}
+
+.champ_inscription .text_info {
+    margin: 0;
+}
+
+.champ_inscription input[readonly] {
+    background-color: #eee;
+    color: #777;
+    cursor: default;
+}
+
+/* --- Profil --- */
+
+.profil_entete {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 18px;
+}
+
+.profil_entete .text_info {
+    margin-top: 6px;
+}
+
+.avatar_grand {
+    height: 80px;
+    width: 80px;
+    margin: 5px;
+    background-color: white;
+}
+
+.avatar_grand i {
+    font-size: 2rem;
+    color: #999;
+}
+
+.avatar_grand img {
+    display: none;
+}
+
+.avatar_grand.avec_photo img {
+    display: block;
+}
+
+.avatar_grand.avec_photo i {
+    display: none;
+}
+
+/* --- Messages des formulaires --- */
+
+.message_formulaire {
+    margin: 0 0 12px;
+    font-size: 0.9rem;
+    color: red;
+}
+
+.message_formulaire:empty {
+    display: none;
+}
+
+.message_formulaire.succes {
+    color: green;
+}
+
+/* --- Boutons --- */
+
+.bouton_principal,
+.bouton_secondaire,
+.bouton_danger {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.bouton_principal {
+    border: none;
+    background-color: #007bff;
+    color: white;
+}
+
+.bouton_principal:hover {
+    background-color: #0062cc;
+}
+
+.bouton_secondaire {
+    border: 1px solid #ccc;
+    background-color: white;
+    color: #333;
+}
+
+.bouton_secondaire:hover {
+    background-color: #e6f2fa;
+}
+
+.bouton_danger {
+    border: none;
+    background-color: #d93025;
+    color: white;
+}
+
+.bouton_danger:hover:not(:disabled) {
+    background-color: #b3261e;
+}
+
+.bouton_danger:disabled {
+    background-color: #eba59f;
+    cursor: not-allowed;
+}
+
+/* --- Champ mot de passe avec bouton œil --- */
+
+.champ_mdp {
+    position: relative;
+}
+
+.champ_mdp input {
+    padding-right: 44px;
+}
+
+.bouton_oeil {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    display: flex;
+    padding: 6px;
+    border: none;
+    background: none;
+    color: #666;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.bouton_oeil:hover {
+    color: #007bff;
+}
+
+/* --- Préférences : interrupteurs --- */
+
+.ligne_option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.ligne_option:first-of-type {
+    padding-top: 0;
+}
+
+.ligne_option:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.option_titre {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.ligne_option .text_info {
+    margin: 2px 0 0;
+}
+
+.parametres_section #message_preferences {
+    margin: 12px 0 0;
+}
+
+.interrupteur {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.interrupteur input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.curseur {
+    position: absolute;
+    inset: 0;
+    border-radius: 26px;
+    background-color: #ccc;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.curseur::before {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s;
+}
+
+.interrupteur input:checked + .curseur {
+    background-color: #007bff;
+}
+
+.interrupteur input:checked + .curseur::before {
+    transform: translateX(20px);
+}
+
+.interrupteur input:focus-visible + .curseur {
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.35);
+}
+
+/* --- Session --- */
 
 .bouton_deconnexion {
     display: flex;
@@ -486,4 +743,100 @@ input[type="submit"]:hover {
 
 .bouton_deconnexion:active {
     background-color: #8c1d18;
+}
+
+/* --- Zone dangereuse --- */
+
+.zone_danger {
+    border-color: #f1b0ab;
+    background-color: #fdf3f2;
+}
+
+.parametres_section.zone_danger h2 {
+    color: #d93025;
+}
+
+.zone_danger .text_info {
+    margin: 0 0 16px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.bouton_supprimer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #d93025;
+    border-radius: 8px;
+    background-color: white;
+    color: #d93025;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.bouton_supprimer:hover {
+    background-color: #d93025;
+    color: white;
+}
+
+/* --- Fenêtre de confirmation (dialog) --- */
+
+.modale {
+    width: 440px;
+    max-width: calc(100% - 32px);
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+    color: #222;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.modale::backdrop {
+    background-color: rgba(0, 0, 0, 0.55);
+}
+
+.modale_contenu {
+    padding: 24px;
+}
+
+.modale h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 10px;
+    font-size: 1.3rem;
+    color: #d93025;
+}
+
+.modale_texte {
+    margin: 0 0 18px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: #444;
+}
+
+.modale_actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+@media (max-width: 480px) {
+    .profil_entete {
+        gap: 14px;
+    }
+
+    .modale_actions {
+        flex-direction: column-reverse;
+    }
+
+    .modale_actions button {
+        width: 100%;
+    }
 }
