@@ -15,10 +15,45 @@
                 <div class="avatar"></div>
                 <button class="bouton_menu" title="Paramètres du compte"><i class="fa-solid fa-gear"></i></button>
             </div>
-            <ul class="liste_conversation">
-            </ul>
-            <button class="nouvelle_conversation">Nouvelle conversation</button>
+
+            <!-- ===== Onglets Discussions / Contacts ===== -->
+            <div class="onglets" role="tablist">
+                <button type="button" class="onglet onglet_actif" id="onglet_discussions" role="tab"
+                        aria-selected="true" aria-controls="panneau_discussions" data-onglet="discussions">
+                    <i class="fa-solid fa-comments"></i> Discussions
+                </button>
+                <button type="button" class="onglet" id="onglet_contacts" role="tab"
+                        aria-selected="false" aria-controls="panneau_contacts" data-onglet="contacts">
+                    <i class="fa-solid fa-address-book"></i> Contacts
+                </button>
+            </div>
+
+            <!-- ===== Panneau Discussions (ton contenu d'origine) ===== -->
+            <div class="panneau" id="panneau_discussions" role="tabpanel" aria-labelledby="onglet_discussions">
+                <ul class="liste_conversation">
+                </ul>
+                <button class="nouvelle_conversation">Nouvelle conversation</button>
+            </div>
+
+            <!-- ===== Panneau Contacts ===== -->
+            <div class="panneau" id="panneau_contacts" role="tabpanel" aria-labelledby="onglet_contacts" hidden>
+                <div class="recherche_contact">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="search" id="recherche_contact" placeholder="Rechercher…"
+                           aria-label="Rechercher un contact" autocomplete="off">
+                </div>
+                <p class="compteur_contacts" id="compteur_contacts"></p>
+                <ul class="liste_contacts" id="liste_contacts"></ul>
+                <div class="contacts_vide" id="contacts_vide" hidden>
+                    <i class="fa-solid fa-user-group"></i>
+                    <p id="texte_contacts_vide"></p>
+                </div>
+                <button type="button" class="bouton_ajout_contact" id="bouton_ajout_contact">
+                    <i class="fa-solid fa-user-plus"></i> Ajouter un contact
+                </button>
+            </div>
         </aside>
+
         <section class="colonne_discussion">
             <div class="entete entete_discussion">
                 <div class="avatar"></div>
@@ -38,6 +73,35 @@
             </form>
         </section>
     </article>
+
+    <!-- ===== Fenêtre : ajouter un contact ===== -->
+    <dialog class="modale modale_info" id="modale_ajout_contact" aria-labelledby="titre_ajout_contact">
+        <form class="modale_contenu" id="form_ajout_contact" novalidate>
+            <h2 id="titre_ajout_contact"><i class="fa-solid fa-user-plus"></i> Ajouter un contact</h2>
+            <p class="modale_texte">Entrez l'adresse courriel de la personne que vous voulez ajouter.</p>
+            <div class="champ_inscription">
+                <label for="courriel_contact">Adresse courriel</label>
+                <input type="email" id="courriel_contact" placeholder="nom@exemple.com" autocomplete="off">
+            </div>
+            <p class="message_formulaire" id="message_ajout_contact"></p>
+            <div class="modale_actions">
+                <button type="button" class="bouton_secondaire" data-fermer>Annuler</button>
+                <button type="submit" class="bouton_principal">Ajouter</button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- ===== Fenêtre : retirer un contact ===== -->
+    <dialog class="modale" id="modale_retrait_contact" aria-labelledby="titre_retrait_contact">
+        <div class="modale_contenu">
+            <h2 id="titre_retrait_contact"><i class="fa-solid fa-user-minus"></i> Retirer ce contact ?</h2>
+            <p class="modale_texte"><strong id="nom_retrait_contact"></strong> sera retiré(e) de votre liste de contacts.</p>
+            <div class="modale_actions">
+                <button type="button" data-fermer>Annuler</button>
+                <button type="button" id="confirmer_retrait_contact">Retirer</button>
+            </div>
+        </div>
+    </dialog>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
