@@ -256,3 +256,18 @@ if(quitter) {
         window.location.href = "./";
     });
 }
+
+const deco = document.querySelector(".bouton_deconnexion");
+
+if (deco) {
+    deco.addEventListener("click", async function(){
+        const { error } = await supabaseClient.auth.signOut();
+        if (!error) {
+            window.location.href = "./connexion.html";
+        }
+        else {
+            alert("Une erreur est survenue au moment de la déconnexion.");
+            console.error(error)
+        }
+    });
+}
