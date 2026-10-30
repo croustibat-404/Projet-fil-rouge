@@ -824,6 +824,7 @@ body.chargement * {
 input[type="submit"]:disabled {
     background-color: #9bbbe0;
     cursor: not-allowed;
+}
 /* =========================================
    Accueil : onglets et liste de contacts
    ========================================= */
