@@ -551,18 +551,6 @@ body.page_parametres {
 
 .bouton_principal,
 .bouton_secondaire,
-.bouton_danger {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 18px;
-    border-radius: 6px;
-    font-family: inherit;
-    font-size: 0.95rem;
-    font-weight: bold;
-    cursor: pointer;
-}
 
 .bouton_principal {
     border: none;
@@ -584,22 +572,7 @@ body.page_parametres {
     background-color: #e6f2fa;
 }
 
-.bouton_danger {
-    border: none;
-    background-color: #d93025;
-    color: white;
-}
-
-.bouton_danger:hover:not(:disabled) {
-    background-color: #b3261e;
-}
-
-.bouton_danger:disabled {
-    background-color: #eba59f;
-    cursor: not-allowed;
-}
-
-/* --- Champ mot de passe avec bouton œil --- */
+/* --- Champ mot de passe avec bouton oeil --- */
 
 .champ_mdp {
     position: relative;
@@ -833,6 +806,15 @@ body.page_parametres {
         width: 100%;
     }
 }
+body.chargement,
+body.chargement * {
+    cursor: wait !important;
+}
+
+input[type="submit"]:disabled {
+    background-color: #9bbbe0;
+    cursor: not-allowed;
+}
 
 body.chargement,
 body.chargement * {
@@ -842,4 +824,351 @@ body.chargement * {
 input[type="submit"]:disabled {
     background-color: #9bbbe0;
     cursor: not-allowed;
+/* =========================================
+   Accueil : onglets et liste de contacts
+   ========================================= */
+
+/* --- Onglets Discussions / Contacts --- */
+
+.onglets {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    flex-shrink: 0;
+}
+
+.onglet {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: -1px;
+    padding: 12px 6px;
+    border: none;
+    border-bottom: 3px solid transparent;
+    background: none;
+    color: #666;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.onglet:hover {
+    background-color: #e6f2fa;
+    color: #0081c7;
+}
+
+.onglet.onglet_actif {
+    border-bottom-color: #007bff;
+    color: #000680;
+}
+
+.panneau {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+.panneau[hidden] {
+    display: none;
+}
+
+/* --- Recherche --- */
+
+.recherche_contact {
+    position: relative;
+    margin: 12px 12px 4px;
+    flex-shrink: 0;
+}
+
+.recherche_contact i {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 0.85rem;
+    pointer-events: none;
+}
+
+.recherche_contact input {
+    width: 100%;
+    height: 36px;
+    padding: 0 12px 0 34px;
+    border: 1px solid #ccc;
+    border-radius: 18px;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.recherche_contact input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.compteur_contacts {
+    margin: 4px 16px 8px;
+    font-size: 0.75rem;
+    color: #666;
+    flex-shrink: 0;
+}
+
+.compteur_contacts:empty {
+    display: none;
+}
+
+/* --- Liste --- */
+
+.liste_contacts {
+    flex: 1;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-y: auto;
+}
+
+.liste_contacts:empty {
+    display: none;
+}
+
+.lettre_contact {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 4px 16px;
+    border-bottom: 1px solid #eee;
+    background-color: #f7f7f7;
+    color: #000680;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.contact {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.contact:hover {
+    background-color: #e6f2fa;
+}
+
+.contact.contact_actif {
+    background-color: rgba(2, 59, 145, 0.397);
+}
+
+.contact_principal {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+    height: 60px;
+    padding: 0 8px 0 16px;
+    border: none;
+    background: none;
+    color: inherit;
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.avatar_contact {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 38px;
+    height: 38px;
+    border: 2px solid black;
+    border-radius: 50%;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.avatar_contact img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.pastille {
+    position: absolute;
+    right: -4px;
+    bottom: -4px;
+    width: 13px;
+    height: 13px;
+    border: 2px solid white;
+    border-radius: 50%;
+    background-color: #b0b0b0;
+}
+
+.pastille.en_ligne {
+    background-color: #2ecc71;
+}
+
+.contact_infos {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.contact_nom,
+.contact_statut {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.contact_nom {
+    font-size: 0.95rem;
+    font-weight: bold;
+}
+
+.contact_statut {
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.contact_statut.en_ligne {
+    color: #1e8e47;
+}
+
+.contact_retirer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    color: #999;
+    font-size: 0.85rem;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.contact_retirer:hover {
+    background-color: #fde2e0;
+    color: #d93025;
+}
+
+/* Sur ordinateur, le bouton « retirer » n'apparaît qu'au survol,
+   par-dessus la ligne, pour laisser toute la largeur au nom */
+@media (hover: hover) {
+    .contact {
+        position: relative;
+    }
+
+    .contact_retirer {
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-50%);
+        margin: 0;
+        background-color: white;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+        opacity: 0;
+    }
+
+    .contact:hover .contact_retirer,
+    .contact:focus-within .contact_retirer {
+        opacity: 1;
+    }
+}
+
+/* --- État vide --- */
+
+.contacts_vide {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    padding: 30px 20px;
+    color: #666;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.contacts_vide[hidden] {
+    display: none;
+}
+
+.contacts_vide i {
+    font-size: 2rem;
+    color: #bbb;
+}
+
+.contacts_vide p {
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* --- Bouton ajouter un contact --- */
+
+.bouton_ajout_contact {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 10px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: white;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.bouton_ajout_contact:hover {
+    background-color: #0056b3;
+}
+
+.bouton_ajout_contact:active {
+    background-color: #004085;
+}
+
+/* Fenêtre d'ajout : titre en bleu au lieu de rouge */
+.modale.modale_info h2 {
+    color: #000680;
+}
+
+@media (max-width: 700px) {
+    .onglet {
+        font-size: 0.8rem;
+    }
+
+    .onglet i {
+        display: none;
+    }
+
+    .contact_principal {
+        padding-left: 10px;
+    }
+
+    .bouton_ajout_contact {
+        padding: 10px;
+        font-size: 0.85rem;
+    }
+
+    .bouton_ajout_contact i {
+        display: none;
+    }
 }
