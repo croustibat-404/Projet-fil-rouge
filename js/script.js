@@ -86,8 +86,9 @@ const formConnexion = document.getElementById("form_connexion");
 
 if (formConnexion) {
     formConnexion.addEventListener("submit", async function (event) {
-        message.textContent = "";
         event.preventDefault();
+        message.textContent = "";
+
         const mail = document.getElementById("id_mail").value.trim();
         const mdp = document.getElementById("id_pass").value;
 
@@ -101,24 +102,39 @@ if (formConnexion) {
             return;
         }
 
-        const { data : dataConnexion, error : errorConnexion } = await supabaseClient.auth.signInWithPassword({
-            email : mail,
-            password : mdp
-        });
-
-        if (errorConnexion !== null) {
-            afficherErreur("Adresse mail ou mot de passe incorrect.");
-            return;
-        }
-
         const connexion = formConnexion.querySelector('input[type="submit"]');
+        const texteBouton = connexion.value;
+        let reussi = false;
+
         connexion.disabled = true;
         connexion.value = "Connexion en cours...";
         document.body.classList.add("chargement");
+        afficherSucces("Connexion en cours...");
 
-        await assurerProfil(dataConnexion.user);
-        afficherSucces("Connexion réussie !");
-        window.location.href = "./";
+        try {
+            const { data: dataConnexion, error: errorConnexion } = await supabaseClient.auth.signInWithPassword({
+                email: mail,
+                password: mdp
+            });
+
+            if (errorConnexion !== null) {
+                afficherErreur("Adresse mail ou mot de passe incorrect.");
+                return;
+            }
+
+            await assurerProfil(dataConnexion.user);
+            reussi = true;
+            afficherSucces("Connexion réussie !");
+            window.location.href = "./";
+        } catch (e) {
+            afficherErreur("Problème de connexion au serveur, réessaie.");
+        } finally {
+            if (!reussi) {
+                connexion.disabled = false;
+                connexion.value = texteBouton;
+                document.body.classList.remove("chargement");
+            }
+        }
     });
 }
 
@@ -126,8 +142,9 @@ const formInscription = document.getElementById("form_inscription");
 
 if (formInscription) {
     formInscription.addEventListener("submit", async function (event) {
-        message.textContent = "";
         event.preventDefault();
+        message.textContent = "";
+
         const mail = document.getElementById("id_mail").value.trim();
         const mdp = document.getElementById("id_pass").value;
         const confirmation = document.getElementById("id_pass_confirm").value;
@@ -135,7 +152,6 @@ if (formInscription) {
         const nom = document.getElementById("id_nom").value.trim();
         const prenom = document.getElementById("id_prenom").value.trim();
         const phone = document.getElementById("id_phone").value.trim();
-
 
         if (!pseudoValide(pseudo)) {
             afficherErreur("Le pseudo n'est pas valide");
@@ -157,46 +173,61 @@ if (formInscription) {
             afficherErreur("Les deux mots de passe ne sont pas identiques.");
             return;
         }
-        
-        const { data, error } = await supabaseClient    
-        .from("profiles")
-        .select("id")
-        .eq("pseudo",pseudo);
-
-        if (error !== null){
-            afficherErreur("Impossible de vérifier le pseudo, veuillez réessayer.");
-            return;
-        } else if (data.length > 0) {
-            afficherErreur("Ce pseudo est déjà pris.");
-            return;
-        }
-
-        const { data: dataInscription, error: errorInscription } = await supabaseClient.auth.signUp({
-            email: mail,
-            password: mdp,
-            options: {
-                data: {
-                    pseudo: pseudo,
-                    nom: nom,
-                    prenom: prenom,
-                    phone: phone
-                }
-            }
-        });
-
-        if (errorInscription !== null) {
-            afficherErreur("Inscription impossible : " + errorInscription.message);
-            return;
-        }
 
         const inscription = formInscription.querySelector('input[type="submit"]');
-        inscription.disabled = true;
-        inscription.value = "Redirection...";
-        document.body.classList.add("chargement");
+        const texteBouton = inscription.value;
+        let reussi = false;
 
-        await assurerProfil(dataInscription.user);
-        afficherSucces("Compte créé !");
-        window.location.href = "./";
+        inscription.disabled = true;
+        inscription.value = "Inscription en cours...";
+        document.body.classList.add("chargement");
+        afficherSucces("Inscription en cours...");
+
+        try {
+            const { data, error } = await supabaseClient
+                .from("profiles")
+                .select("id")
+                .eq("pseudo", pseudo);
+
+            if (error !== null) {
+                afficherErreur("Impossible de vérifier le pseudo, veuillez réessayer.");
+                return;
+            } else if (data.length > 0) {
+                afficherErreur("Ce pseudo est déjà pris.");
+                return;
+            }
+
+            const { data: dataInscription, error: errorInscription } = await supabaseClient.auth.signUp({
+                email: mail,
+                password: mdp,
+                options: {
+                    data: {
+                        pseudo: pseudo,
+                        nom: nom,
+                        prenom: prenom,
+                        phone: phone
+                    }
+                }
+            });
+
+            if (errorInscription !== null) {
+                afficherErreur("Inscription impossible : " + errorInscription.message);
+                return;
+            }
+
+            await assurerProfil(dataInscription.user);
+            reussi = true;
+            afficherSucces("Compte créé ! Redirection...");
+            window.location.href = "./";
+        } catch (e) {
+            afficherErreur("Problème de connexion au serveur, réessaie.");
+        } finally {
+            if (!reussi) {
+                inscription.disabled = false;
+                inscription.value = texteBouton;
+                document.body.classList.remove("chargement");
+            }
+        }
     });
 }
 
