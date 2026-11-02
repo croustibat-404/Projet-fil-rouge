@@ -60,13 +60,17 @@ const pageActuelle = window.location.pathname.split("/").pop() || "index.html";
 const pagePublique = pageActuelle === "connexion.html" || pageActuelle === "inscription.html";
 
 async function verifierSession() {
-    const { data } = await supabaseClient.auth.getSession();
-    const estConnecte = data.session !== null;
+    const { data, error } = await supabaseClient.auth.getUser();
+    const estConnecte = (error === null) && (data.length > 0);
+
+    if (!estConnecte) {
+        await supabaseClient.auth.signOut({ scope: "local" });
+    }
 
     if (!estConnecte && !pagePublique) {
         window.location.href = "connexion.html";
     } else if (estConnecte && pagePublique) {
-        window.location.href = "index.html";
+        window.location.href = "./";
     }
 }
 
