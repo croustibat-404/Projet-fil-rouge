@@ -61,7 +61,7 @@ const pagePublique = pageActuelle === "connexion.html" || pageActuelle === "insc
 
 async function verifierSession() {
     const { data, error } = await supabaseClient.auth.getUser();
-    const estConnecte = (error === null) && (data.length > 0);
+    const estConnecte = (error === null) && (data.user !== null);
 
     if (!estConnecte) {
         await supabaseClient.auth.signOut({ scope: "local" });
@@ -323,5 +323,55 @@ if (deco) {
             alert("Une erreur est survenue au moment de la déconnexion.");
             console.error(error)
         }
+    });
+}
+
+const boutonConversation = document.querySelector(".nouvelle_conversation");
+
+if (boutonConversation) {
+    boutonConversation.addEventListener("click", async function () {
+        let pseudo = prompt("Entrez le pseudo de la personne :");
+        if (pseudo === null) {
+            return;
+        } else {
+            pseudo = pseudo.trim().toLowerCase();
+        }
+        const { data,error } = await supabaseClient.from("profiles").select("id").eq("pseudo", pseudo);
+        const { data:dataUser,error:errorUser } = await supabaseClient.auth.getUser();
+        if (error) {
+            alert("Une erreur est survenue.");
+            return;
+        } else if (data.length === 0) {
+            alert("Aucun utilisateur avec ce pseudo");
+            return;
+        } else {
+            if (errorUser) {
+                alert("Une erreur est survenue.");
+                return;
+            }
+            else if (data[0].id === dataUser.user.id) {
+                alert("Vous ne pouvez pas créer une conversation avec vous-même.");
+                return;
+            }
+        }
+        const autreId = data[0].id;
+        const monId = dataUser.user.id;
+        const { data:dataConv,error: errorConv } = await supabaseClient.from("conversations").insert([
+            { est_groupe: false }
+        ]).select();
+        if (errorConv) {
+            alert("Une erreur est survenue lors de la création de la conversation.");
+            return;
+        }
+        const idConv = dataConv[0].id;
+        const { error: errorMembres } = await supabaseClient.from("membres").insert([
+            { conversation_id: idConv, user_id: monId },
+            { conversation_id: idConv, user_id: autreId }
+        ]);
+        if (errorMembres) {
+            alert("Une erreur est survenue lors de l'ajout des membres à la conversation.");
+            return;
+        } 
+        alert("Conversation créée avec succès !");
     });
 }
