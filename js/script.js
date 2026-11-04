@@ -86,6 +86,58 @@ async function assurerProfil(user) {
     }
 }
 
+async function chargerConversations() {
+    const liste_conv = document.querySelector(".liste_conversation");
+    if (!liste_conv) {
+        return;
+    }
+    const { data,error} = await supabaseClient.auth.getUser();
+    if (error) {
+        console.error("Erreur lors de la récupération de l'utilisateur :", error);
+        return;
+    }
+    const monId = data.user.id;
+    const { data: mesConversations, error: errorConversations } = await supabaseClient.from("membres").select("conversation_id").eq("user_id", monId);
+    if (errorConversations) {
+        console.error("Erreur lors de la récupération des conversations :", errorConversations);
+        return;
+    }
+    for (let conv of mesConversations) {
+        const { data: dataConversation, error: errorConversation } = await supabaseClient.from("membres").select("user_id").eq("conversation_id", conv.conversation_id).neq("user_id", monId);
+        if (errorConversation) {
+            console.error("Erreur lors de la récupération des membres de la conversation :", errorConversation);
+            continue;
+        }
+        if (dataConversation.length === 0) {
+            console.warn("Aucun autre membre trouvé pour la conversation :", conv.conversation_id);
+            continue;
+        }
+        const { data: dataPseudo, error: errorPseudo } = await supabaseClient.from("profiles").select("pseudo").eq("id", dataConversation[0].user_id);
+        if (errorPseudo) {
+            console.error("Erreur lors de la récupération du pseudo :", errorPseudo);
+            continue;
+        }
+                if (dataPseudo.length === 0) {
+            continue;
+        }
+
+        const conversation = document.createElement("li");
+        conversation.classList.add("conversation");
+        conversation.id = "conv-" + conv.conversation_id;
+
+        const avatar = document.createElement("div");
+        avatar.classList.add("petit_avatar");
+
+        const span = document.createElement("span");
+        span.textContent = dataPseudo[0].pseudo;
+
+        conversation.appendChild(avatar);
+        conversation.appendChild(span);
+
+        liste_conv.appendChild(conversation);
+    }
+}
+
 const formConnexion = document.getElementById("form_connexion");
 
 if (formConnexion) {
