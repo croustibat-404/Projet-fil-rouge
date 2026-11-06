@@ -1,4 +1,5 @@
 const message = document.getElementById("message");
+let conversationActive = null;
 
 function afficherErreur(texte) {
     message.textContent = texte;
@@ -86,6 +87,39 @@ async function assurerProfil(user) {
     }
 }
 
+async function chargerMessages(conversationId) {
+    if (conversationActive === null) {
+        return;
+    }
+    const { data:dataMessages, error:errorMessages } = await supabaseClient.from("messages").select("*").eq("conversation_id", conversationId).order("id", { ascending: true });
+    if (errorMessages) {
+        console.error("Erreur lors de la récupération des messages :", errorMessages);
+        return;
+    }
+    const { data: dataUser, error: errorUser } = await supabaseClient.auth.getUser();
+    if (errorUser) {
+        console.error("Erreur lors de la récupération de l'utilisateur :", errorUser);
+        return;
+    }
+    const listeMessages = document.getElementById("liste_message");
+    listeMessages.textContent = "";
+    for (let msg of dataMessages) {
+        const type = (msg.user_id === dataUser.user.id) ? "envoye" : "recu";
+        ajouterMessage(msg.content, type, msg.created_at);
+    }
+}
+
+async function ouvrirConversation(conversationId, pseudo) {
+    conversationActive = conversationId;
+    const entete = document.querySelector(".nom_contact");
+    entete.textContent = pseudo;
+    for (let conv of document.querySelectorAll(".conversation")) {
+        conv.classList.remove("conversation_active");
+    }
+    document.getElementById("conv-" + conversationId).classList.add("conversation_active");
+    await chargerMessages(conversationId);
+}
+
 async function chargerConversations() {
     const liste_conv = document.querySelector(".liste_conversation");
     if (!liste_conv) {
@@ -102,6 +136,7 @@ async function chargerConversations() {
         console.error("Erreur lors de la récupération des conversations :", errorConversations);
         return;
     }
+    liste_conv.textContent = "";
     for (let conv of mesConversations) {
         const { data: dataConversation, error: errorConversation } = await supabaseClient.from("membres").select("user_id").eq("conversation_id", conv.conversation_id).neq("user_id", monId);
         if (errorConversation) {
@@ -117,13 +152,19 @@ async function chargerConversations() {
             console.error("Erreur lors de la récupération du pseudo :", errorPseudo);
             continue;
         }
-                if (dataPseudo.length === 0) {
+        if (dataPseudo.length === 0) {
             continue;
         }
 
         const conversation = document.createElement("li");
+        conversation.addEventListener("click", function () {
+            ouvrirConversation(conv.conversation_id, dataPseudo[0].pseudo);
+        });
         conversation.classList.add("conversation");
         conversation.id = "conv-" + conv.conversation_id;
+        if (conv.conversation_id === conversationActive) {
+            conversation.classList.add("conversation_active");
+        }
 
         const avatar = document.createElement("div");
         avatar.classList.add("petit_avatar");
@@ -300,7 +341,7 @@ function mettreAJourBoutonEnvoyer() {
 if (champMessage) {
     champMessage.addEventListener("input", mettreAJourBoutonEnvoyer);
 }
-function ajouterMessage(texte, type) {
+function ajouterMessage(texte, type, dateMessage = new Date()) {
 
     const ligne = document.createElement("div");
     ligne.classList.add("message", type);
@@ -313,7 +354,7 @@ function ajouterMessage(texte, type) {
     texteSpan.textContent = texte;
     bulle.appendChild(texteSpan);
 
-    const maintenant = new Date();
+    const maintenant = new Date(dateMessage);
     const heures = String(maintenant.getHours()).padStart(2, '0');
     const minutes = String(maintenant.getMinutes()).padStart(2, '0');
     const heureFormatee = `${heures}:${minutes}`;
@@ -373,7 +414,7 @@ if (deco) {
         }
         else {
             alert("Une erreur est survenue au moment de la déconnexion.");
-            console.error(error)
+            console.error(error);
         }
     });
 }
@@ -425,5 +466,8 @@ if (boutonConversation) {
             return;
         } 
         alert("Conversation créée avec succès !");
+        await chargerConversations();
     });
 }
+
+chargerConversations();
