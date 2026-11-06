@@ -372,10 +372,6 @@ input[type="submit"]:hover {
     color: #666;
 }
 
-#message.succes {
-    color: green;
-}
-
 .conversation span {
     margin-left: 12px;
 }
@@ -833,16 +829,6 @@ body.page_parametres {
         width: 100%;
     }
 }
-body.chargement,
-body.chargement * {
-    cursor: wait !important;
-}
-
-input[type="submit"]:disabled {
-    background-color: #9bbbe0;
-    cursor: not-allowed;
-}
-
 body.chargement,
 body.chargement * {
     cursor: wait !important;
