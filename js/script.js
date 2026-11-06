@@ -471,3 +471,23 @@ if (boutonConversation) {
 }
 
 chargerConversations();
+
+
+const onglets = document.querySelectorAll(".onglet");
+
+function activerOnglet(ongletChoisi) {
+    for (let onglet of onglets) {
+        const estChoisi = onglet === ongletChoisi;
+        const panneau = document.getElementById(onglet.getAttribute("aria-controls"));
+
+        onglet.classList.toggle("onglet_actif", estChoisi);
+        onglet.setAttribute("aria-selected", estChoisi ? "true" : "false");
+        panneau.hidden = !estChoisi;
+    }
+}
+
+for (let onglet of onglets) {
+    onglet.addEventListener("click", function () {
+        activerOnglet(onglet);
+    });
+}
