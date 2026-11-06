@@ -542,6 +542,17 @@ function creerLigneContact(contact) {
     bouton.appendChild(infos);
     ligne.appendChild(bouton);
 
+    const boutonRetirer = document.createElement("button");
+    boutonRetirer.type = "button";
+    boutonRetirer.classList.add("contact_retirer");
+    boutonRetirer.title = "Retirer " + contact.pseudo;
+    boutonRetirer.setAttribute("aria-label", "Retirer " + contact.pseudo);
+    boutonRetirer.innerHTML = '<i class="fa-solid fa-user-minus"></i>';
+    boutonRetirer.addEventListener("click", function () {
+        ouvrirRetraitContact(contact);
+    });
+    ligne.appendChild(boutonRetirer);
+
     return ligne;
 }
 
@@ -595,3 +606,96 @@ if (rechercheContact) {
 }
 
 afficherContacts();
+
+for (let boutonFermer of document.querySelectorAll("[data-fermer]")) {
+    boutonFermer.addEventListener("click", function () {
+        boutonFermer.closest("dialog").close();
+    });
+}
+
+for (let modale of document.querySelectorAll("dialog.modale")) {
+    modale.addEventListener("click", function (event) {
+        if (event.target === modale) {
+            modale.close();
+        }
+    });
+}
+
+const modaleAjoutContact = document.getElementById("modale_ajout_contact");
+const formAjoutContact = document.getElementById("form_ajout_contact");
+const champCourrielContact = document.getElementById("courriel_contact");
+const messageAjoutContact = document.getElementById("message_ajout_contact");
+const boutonAjoutContact = document.getElementById("bouton_ajout_contact");
+
+// À compléter avec Supabase : chercher l'utilisateur par son courriel,
+// l'ajouter à listeDeContacts puis renvoyer "" si tout s'est bien passé,
+// ou un message d'erreur sinon.
+async function ajouterContact(courriel) {
+    return "L'ajout de contact n'est pas encore relié au serveur.";
+}
+
+if (boutonAjoutContact) {
+    boutonAjoutContact.addEventListener("click", function () {
+        formAjoutContact.reset();
+        messageAjoutContact.textContent = "";
+        messageAjoutContact.className = "message_formulaire";
+        modaleAjoutContact.showModal();
+        champCourrielContact.focus();
+    });
+}
+
+if (formAjoutContact) {
+    formAjoutContact.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        messageAjoutContact.className = "message_formulaire";
+
+        const courriel = champCourrielContact.value.trim().toLowerCase();
+
+        if (!mailValide(courriel)) {
+            messageAjoutContact.textContent = "L'adresse courriel n'est pas valide.";
+            return;
+        }
+
+        for (let contact of listeDeContacts) {
+            if (contact.courriel === courriel) {
+                messageAjoutContact.textContent = "Cette personne est déjà dans vos contacts.";
+                return;
+            }
+        }
+
+        const boutonValider = formAjoutContact.querySelector('button[type="submit"]');
+        boutonValider.disabled = true;
+        const erreur = await ajouterContact(courriel);
+        boutonValider.disabled = false;
+
+        if (erreur !== "") {
+            messageAjoutContact.textContent = erreur;
+            return;
+        }
+
+        afficherContacts();
+        modaleAjoutContact.close();
+    });
+}
+
+const modaleRetraitContact = document.getElementById("modale_retrait_contact");
+const nomRetraitContact = document.getElementById("nom_retrait_contact");
+const confirmerRetraitContact = document.getElementById("confirmer_retrait_contact");
+let contactARetirer = null;
+
+function ouvrirRetraitContact(contact) {
+    contactARetirer = contact;
+    nomRetraitContact.textContent = contact.pseudo;
+    modaleRetraitContact.showModal();
+}
+
+if (confirmerRetraitContact) {
+    confirmerRetraitContact.addEventListener("click", function () {
+        listeDeContacts = listeDeContacts.filter(function (contact) {
+            return contact !== contactARetirer;
+        });
+        contactARetirer = null;
+        afficherContacts();
+        modaleRetraitContact.close();
+    });
+}
