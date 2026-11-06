@@ -491,3 +491,107 @@ for (let onglet of onglets) {
         activerOnglet(onglet);
     });
 }
+
+let listeDeContacts = [];
+
+const listeContactsHTML = document.getElementById("liste_contacts");
+const rechercheContact = document.getElementById("recherche_contact");
+const compteurContacts = document.getElementById("compteur_contacts");
+const contactsVide = document.getElementById("contacts_vide");
+const texteContactsVide = document.getElementById("texte_contacts_vide");
+
+function initiales(texte) {
+    return texte.slice(0, 2).toUpperCase();
+}
+
+function couleurAvatar(texte) {
+    let somme = 0;
+    for (let lettre of texte) {
+        somme += lettre.charCodeAt(0);
+    }
+    return "hsl(" + ((somme * 37) % 360) + ", 55%, 45%)";
+}
+
+function creerLigneContact(contact) {
+    const ligne = document.createElement("li");
+    ligne.classList.add("contact");
+
+    const bouton = document.createElement("button");
+    bouton.type = "button";
+    bouton.classList.add("contact_principal");
+
+    const avatar = document.createElement("span");
+    avatar.classList.add("avatar_contact");
+    avatar.style.backgroundColor = couleurAvatar(contact.pseudo);
+    avatar.textContent = initiales(contact.pseudo);
+
+    const infos = document.createElement("span");
+    infos.classList.add("contact_infos");
+
+    const nom = document.createElement("span");
+    nom.classList.add("contact_nom");
+    nom.textContent = contact.pseudo;
+
+    const statut = document.createElement("span");
+    statut.classList.add("contact_statut");
+    statut.textContent = ((contact.prenom || "") + " " + (contact.nom || "")).trim();
+
+    infos.appendChild(nom);
+    infos.appendChild(statut);
+    bouton.appendChild(avatar);
+    bouton.appendChild(infos);
+    ligne.appendChild(bouton);
+
+    return ligne;
+}
+
+function afficherContacts() {
+    if (!listeContactsHTML) {
+        return;
+    }
+
+    const recherche = rechercheContact.value.trim().toLowerCase();
+    const contactsFiltres = listeDeContacts
+        .filter(function (contact) {
+            return contact.pseudo.toLowerCase().includes(recherche);
+        })
+        .sort(function (a, b) {
+            return a.pseudo.localeCompare(b.pseudo);
+        });
+
+    listeContactsHTML.textContent = "";
+    let lettreActuelle = "";
+
+    for (let contact of contactsFiltres) {
+        const lettre = contact.pseudo[0].toUpperCase();
+        if (lettre !== lettreActuelle) {
+            lettreActuelle = lettre;
+            const separateur = document.createElement("li");
+            separateur.classList.add("lettre_contact");
+            separateur.textContent = lettre;
+            listeContactsHTML.appendChild(separateur);
+        }
+        listeContactsHTML.appendChild(creerLigneContact(contact));
+    }
+
+    if (listeDeContacts.length === 0) {
+        compteurContacts.textContent = "";
+    } else if (recherche !== "") {
+        compteurContacts.textContent = contactsFiltres.length + " résultat(s)";
+    } else {
+        compteurContacts.textContent = listeDeContacts.length + " contact(s)";
+    }
+
+    contactsVide.hidden = contactsFiltres.length > 0;
+    if (listeDeContacts.length === 0) {
+        texteContactsVide.textContent = "Vous n'avez encore aucun contact. Ajoutez-en un avec le bouton ci-dessous.";
+    } else {
+        texteContactsVide.textContent = "Aucun contact ne correspond à « " + recherche + " ».";
+    }
+}
+
+if (rechercheContact) {
+    rechercheContact.addEventListener("input", afficherContacts);
+}
+
+afficherContacts();
