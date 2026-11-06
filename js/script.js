@@ -71,7 +71,7 @@ async function verifierSession() {
     if (!estConnecte && !pagePublique) {
         window.location.href = "connexion.html";
     } else if (estConnecte && pagePublique) {
-        window.location.href = "./";
+        window.location.href = "index.html";
     }
 }
 
@@ -222,7 +222,7 @@ if (formConnexion) {
             await assurerProfil(dataConnexion.user);
             reussi = true;
             afficherSucces("Connexion réussie !");
-            window.location.href = "./";
+            window.location.href = "index.html";
         } catch (e) {
             afficherErreur("Problème de connexion au serveur, réessaie.");
         } finally {
@@ -315,7 +315,7 @@ if (formInscription) {
             await assurerProfil(dataInscription.user);
             reussi = true;
             afficherSucces("Compte créé ! Redirection...");
-            window.location.href = "./";
+            window.location.href = "index.html";
         } catch (e) {
             afficherErreur("Problème de connexion au serveur, réessaie.");
         } finally {
@@ -400,7 +400,7 @@ const quitter = document.querySelector(".bouton_quitter");
 
 if(quitter) {
     quitter.addEventListener("click", function () {
-        window.location.href = "./";
+        window.location.href = "index.html";
     });
 }
 
