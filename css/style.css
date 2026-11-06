@@ -551,6 +551,18 @@ body.page_parametres {
 
 .bouton_principal,
 .bouton_secondaire,
+.bouton_danger {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+}
 
 .bouton_principal {
     border: none;
@@ -570,6 +582,21 @@ body.page_parametres {
 
 .bouton_secondaire:hover {
     background-color: #e6f2fa;
+}
+
+.bouton_danger {
+    border: none;
+    background-color: #d93025;
+    color: white;
+}
+
+.bouton_danger:hover:not(:disabled) {
+    background-color: #b3261e;
+}
+
+.bouton_danger:disabled {
+    background-color: #eba59f;
+    cursor: not-allowed;
 }
 
 /* --- Champ mot de passe avec bouton oeil --- */
