@@ -746,6 +746,10 @@ async function chargerProfil() {
     document.getElementById("email").value = data.user.email;
     document.getElementById("prenom").value = infos.prenom || "";
     document.getElementById("nom").value = infos.nom || "";
+
+    if (infos.avatar) {
+        afficherAvatarProfil(infos.avatar);
+    }
 }
 
 if (formProfil) {
@@ -766,8 +770,26 @@ function afficherAvatarProfil(url) {
     }
 }
 
+const messageProfil = document.getElementById("message_profil");
+
+async function enregistrerAvatar(url) {
+    const { error } = await supabaseClient.auth.updateUser({
+        data: { avatar: url }
+    });
+
+    if (error) {
+        messageProfil.textContent = "Impossible d'enregistrer l'avatar, réessayez.";
+        messageProfil.className = "message_formulaire";
+        return;
+    }
+    messageProfil.textContent = "Avatar enregistré !";
+    messageProfil.className = "message_formulaire succes";
+}
+
 for (let bouton of avatarsProposes) {
     bouton.addEventListener("click", function () {
-        afficherAvatarProfil(bouton.querySelector("img").src);
+        const url = bouton.querySelector("img").src;
+        afficherAvatarProfil(url);
+        enregistrerAvatar(url);
     });
 }
