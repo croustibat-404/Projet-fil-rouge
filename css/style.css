@@ -235,7 +235,7 @@ input[type="submit"]:hover {
     background-color: white;
     color: #0081c7;
     font-size: 1.1rem;
-    cursor: pointer;
+    text-decoration: none;
 }
 
 .bouton_menu:hover,

@@ -388,22 +388,6 @@ if(formulaire){
     });
 }
 
-const reglages = document.querySelector(".bouton_menu");
-
-if(reglages) {
-    reglages.addEventListener("click", function () {
-        window.location.href = "parametres.html";
-    });
-}
-
-const quitter = document.querySelector(".bouton_quitter");
-
-if(quitter) {
-    quitter.addEventListener("click", function () {
-        window.location.href = "index.html";
-    });
-}
-
 const deco = document.querySelector(".bouton_deconnexion");
 
 if (deco) {
