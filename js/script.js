@@ -117,7 +117,14 @@ async function ouvrirConversation(conversationId, pseudo) {
         conv.classList.remove("conversation_active");
     }
     document.getElementById("conv-" + conversationId).classList.add("conversation_active");
+
+    const champ = document.getElementById("champ-message");
+    champ.disabled = false;
+    champ.placeholder = "Écrire un message...";
+    document.getElementById("liste_message").dataset.vide = "Aucun message pour l'instant, dites bonjour !";
+
     await chargerMessages(conversationId);
+    champ.focus();
 }
 
 async function chargerConversations() {

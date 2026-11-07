@@ -1334,3 +1334,18 @@ input[type="submit"]:disabled {
 .ajout_story:hover {
     background-color: #0056b3;
 }
+
+/* --- Zone de discussion sans conversation ou sans message --- */
+
+.liste_message:empty::before {
+    content: attr(data-vide);
+    margin: auto;
+    color: #999;
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+.champ_message:disabled {
+    background-color: #f2f2f2;
+    cursor: not-allowed;
+}
