@@ -732,3 +732,21 @@ if (ouvrirSuppression) {
         confirmerSuppression.disabled = champConfirmationSuppression.value.trim() !== "SUPPRIMER";
     });
 }
+
+const formProfil = document.getElementById("form_profil");
+
+async function chargerProfil() {
+    const { data, error } = await supabaseClient.auth.getUser();
+    if (error || data.user === null) {
+        return;
+    }
+
+    const infos = data.user.user_metadata;
+    document.getElementById("email").value = data.user.email;
+    document.getElementById("prenom").value = infos.prenom || "";
+    document.getElementById("nom").value = infos.nom || "";
+}
+
+if (formProfil) {
+    chargerProfil();
+}
