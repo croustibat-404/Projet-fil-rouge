@@ -793,3 +793,29 @@ for (let bouton of avatarsProposes) {
         enregistrerAvatar(url);
     });
 }
+
+const monAvatar = document.getElementById("mon_avatar");
+
+async function chargerMonAvatar() {
+    const { data, error } = await supabaseClient.auth.getUser();
+    if (error || data.user === null) {
+        return;
+    }
+
+    const infos = data.user.user_metadata;
+    monAvatar.title = infos.pseudo || "";
+
+    if (infos.avatar) {
+        const image = document.createElement("img");
+        image.src = infos.avatar;
+        image.alt = "Mon avatar";
+        monAvatar.appendChild(image);
+    } else if (infos.pseudo) {
+        monAvatar.textContent = initiales(infos.pseudo);
+        monAvatar.style.backgroundColor = couleurAvatar(infos.pseudo);
+    }
+}
+
+if (monAvatar) {
+    chargerMonAvatar();
+}
