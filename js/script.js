@@ -699,3 +699,36 @@ if (confirmerRetraitContact) {
         modaleRetraitContact.close();
     });
 }
+
+for (let boutonOeil of document.querySelectorAll(".bouton_oeil")) {
+    boutonOeil.addEventListener("click", function () {
+        const champ = boutonOeil.parentElement.querySelector("input");
+        const icone = boutonOeil.querySelector("i");
+        const estCache = champ.type === "password";
+
+        champ.type = estCache ? "text" : "password";
+        icone.classList.toggle("fa-eye", !estCache);
+        icone.classList.toggle("fa-eye-slash", estCache);
+        boutonOeil.setAttribute("aria-label", estCache ? "Masquer le mot de passe" : "Afficher le mot de passe");
+    });
+}
+
+const modaleSuppression = document.getElementById("modale_suppression");
+const ouvrirSuppression = document.getElementById("ouvrir_suppression");
+const champConfirmationSuppression = document.getElementById("confirmation_suppression");
+const confirmerSuppression = document.getElementById("confirmer_suppression");
+const messageSuppression = document.getElementById("message_suppression");
+
+if (ouvrirSuppression) {
+    ouvrirSuppression.addEventListener("click", function () {
+        champConfirmationSuppression.value = "";
+        confirmerSuppression.disabled = true;
+        messageSuppression.textContent = "";
+        modaleSuppression.showModal();
+        champConfirmationSuppression.focus();
+    });
+
+    champConfirmationSuppression.addEventListener("input", function () {
+        confirmerSuppression.disabled = champConfirmationSuppression.value.trim() !== "SUPPRIMER";
+    });
+}
