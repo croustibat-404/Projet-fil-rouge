@@ -278,7 +278,12 @@ input[type="submit"]:hover {
     background-color: #e6f2fa;
 }
 
-.nouvelle_conversation {
+.nouvelle_conversation,
+.bouton_ajout_contact {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
     margin: 10px;
     padding: 12px;
     border: none;
@@ -289,13 +294,16 @@ input[type="submit"]:hover {
     font-size: 0.95rem;
     font-weight: bold;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
-.nouvelle_conversation:hover {
+.nouvelle_conversation:hover,
+.bouton_ajout_contact:hover {
     background-color: #0056b3;
 }
 
-.nouvelle_conversation:active {
+.nouvelle_conversation:active,
+.bouton_ajout_contact:active {
     background-color: #004085;
 }
 
@@ -1027,34 +1035,6 @@ input[type="submit"]:disabled {
 .contacts_vide p {
     margin: 0;
     line-height: 1.4;
-}
-
-/* --- Bouton ajouter un contact --- */
-
-.bouton_ajout_contact {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin: 10px;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    background-color: #007bff;
-    color: white;
-    font-family: inherit;
-    font-size: 0.95rem;
-    font-weight: bold;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-
-.bouton_ajout_contact:hover {
-    background-color: #0056b3;
-}
-
-.bouton_ajout_contact:active {
-    background-color: #004085;
 }
 
 /* Fenêtre d'ajout : titre en bleu au lieu de rouge */
