@@ -1037,10 +1037,6 @@ input[type="submit"]:disabled {
     line-height: 1.4;
 }
 
-/* Fenêtre d'ajout : titre en bleu au lieu de rouge */
-.modale.modale_info h2 {
-    color: #000680;
-}
 
 @media (max-width: 700px) {
     .onglet {

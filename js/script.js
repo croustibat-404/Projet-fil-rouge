@@ -621,60 +621,41 @@ for (let modale of document.querySelectorAll("dialog.modale")) {
     });
 }
 
-const modaleAjoutContact = document.getElementById("modale_ajout_contact");
-const formAjoutContact = document.getElementById("form_ajout_contact");
-const champCourrielContact = document.getElementById("courriel_contact");
-const messageAjoutContact = document.getElementById("message_ajout_contact");
 const boutonAjoutContact = document.getElementById("bouton_ajout_contact");
 
-// À compléter avec Supabase : chercher l'utilisateur par son courriel,
+// À compléter avec Supabase : chercher l'utilisateur par son pseudo,
 // l'ajouter à listeDeContacts puis renvoyer "" si tout s'est bien passé,
 // ou un message d'erreur sinon.
-async function ajouterContact(courriel) {
+async function ajouterContact(pseudo) {
     return "L'ajout de contact n'est pas encore relié au serveur.";
 }
 
 if (boutonAjoutContact) {
-    boutonAjoutContact.addEventListener("click", function () {
-        formAjoutContact.reset();
-        messageAjoutContact.textContent = "";
-        messageAjoutContact.className = "message_formulaire";
-        modaleAjoutContact.showModal();
-        champCourrielContact.focus();
-    });
-}
+    boutonAjoutContact.addEventListener("click", async function () {
+        let pseudo = prompt("Entrez le pseudo de la personne :");
+        if (pseudo === null) {
+            return;
+        }
+        pseudo = pseudo.trim().toLowerCase();
 
-if (formAjoutContact) {
-    formAjoutContact.addEventListener("submit", async function (event) {
-        event.preventDefault();
-        messageAjoutContact.className = "message_formulaire";
-
-        const courriel = champCourrielContact.value.trim().toLowerCase();
-
-        if (!mailValide(courriel)) {
-            messageAjoutContact.textContent = "L'adresse courriel n'est pas valide.";
+        if (!pseudoValide(pseudo)) {
+            alert("Ce pseudo n'est pas valide.");
             return;
         }
 
         for (let contact of listeDeContacts) {
-            if (contact.courriel === courriel) {
-                messageAjoutContact.textContent = "Cette personne est déjà dans vos contacts.";
+            if (contact.pseudo === pseudo) {
+                alert("Cette personne est déjà dans vos contacts.");
                 return;
             }
         }
 
-        const boutonValider = formAjoutContact.querySelector('button[type="submit"]');
-        boutonValider.disabled = true;
-        const erreur = await ajouterContact(courriel);
-        boutonValider.disabled = false;
-
+        const erreur = await ajouterContact(pseudo);
         if (erreur !== "") {
-            messageAjoutContact.textContent = erreur;
+            alert(erreur);
             return;
         }
-
         afficherContacts();
-        modaleAjoutContact.close();
     });
 }
 

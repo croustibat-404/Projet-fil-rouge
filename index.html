@@ -49,7 +49,7 @@
                     <p id="texte_contacts_vide"></p>
                 </div>
                 <button type="button" class="bouton_ajout_contact" id="bouton_ajout_contact">
-                    <i class="fa-solid fa-user-plus"></i> Ajouter un contact
+                    <i class="fa-solid"></i> Ajouter un contact
                 </button>
             </div>
         </aside>
@@ -73,23 +73,6 @@
             </form>
         </section>
     </article>
-
-    <!-- ===== Fenêtre : ajouter un contact ===== -->
-    <dialog class="modale modale_info" id="modale_ajout_contact" aria-labelledby="titre_ajout_contact">
-        <form class="modale_contenu" id="form_ajout_contact" novalidate>
-            <h2 id="titre_ajout_contact"><i class="fa-solid fa-user-plus"></i> Ajouter un contact</h2>
-            <p class="modale_texte">Entrez l'adresse courriel de la personne que vous voulez ajouter.</p>
-            <div class="champ_inscription">
-                <label for="courriel_contact">Adresse courriel</label>
-                <input type="email" id="courriel_contact" placeholder="nom@exemple.com" autocomplete="off">
-            </div>
-            <p class="message_formulaire" id="message_ajout_contact"></p>
-            <div class="modale_actions">
-                <button type="button" class="bouton_secondaire" data-fermer>Annuler</button>
-                <button type="submit" class="bouton_principal">Ajouter</button>
-            </div>
-        </form>
-    </dialog>
 
     <!-- ===== Fenêtre : retirer un contact ===== -->
     <dialog class="modale" id="modale_retrait_contact" aria-labelledby="titre_retrait_contact">
