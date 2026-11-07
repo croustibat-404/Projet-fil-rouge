@@ -509,6 +509,20 @@ function creerLigneContact(contact) {
     avatar.style.backgroundColor = couleurAvatar(contact.pseudo);
     avatar.textContent = initiales(contact.pseudo);
 
+    // Cliquer sur la photo d'un contact qui a une story l'ouvre
+    if (contact.stories && contact.stories.length > 0) {
+        avatar.classList.add("a_story");
+        avatar.classList.toggle("story_vue", contact.storyVue === true);
+        avatar.title = "Voir la story de " + contact.pseudo;
+
+        avatar.addEventListener("click", function (event) {
+            event.stopPropagation();
+            contact.storyVue = true;
+            avatar.classList.add("story_vue");
+            ouvrirStory(contact, contact.stories);
+        });
+    }
+
     const infos = document.createElement("span");
     infos.classList.add("contact_infos");
 
