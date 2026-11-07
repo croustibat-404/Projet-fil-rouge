@@ -742,6 +742,7 @@ async function chargerProfil() {
     }
 
     const infos = data.user.user_metadata;
+    document.getElementById("pseudo").value = infos.pseudo || "";
     document.getElementById("email").value = data.user.email;
     document.getElementById("prenom").value = infos.prenom || "";
     document.getElementById("nom").value = infos.nom || "";
