@@ -698,29 +698,6 @@ if (ouvrirSuppression) {
     });
 }
 
-const formProfil = document.getElementById("form_profil");
-
-async function chargerProfil() {
-    const { data, error } = await supabaseClient.auth.getUser();
-    if (error || data.user === null) {
-        return;
-    }
-
-    const infos = data.user.user_metadata;
-    document.getElementById("pseudo").value = infos.pseudo || "";
-    document.getElementById("email").value = data.user.email;
-    document.getElementById("prenom").value = infos.prenom || "";
-    document.getElementById("nom").value = infos.nom || "";
-
-    if (infos.avatar) {
-        afficherAvatarProfil(infos.avatar);
-    }
-}
-
-if (formProfil) {
-    chargerProfil();
-}
-
 const avatarsProposes = document.querySelectorAll(".avatar_propose");
 const avatarProfil = document.getElementById("avatar_profil");
 const apercuAvatar = document.getElementById("apercu_avatar");
@@ -759,28 +736,44 @@ for (let bouton of avatarsProposes) {
     });
 }
 
+const formProfil = document.getElementById("form_profil");
 const monAvatar = document.getElementById("mon_avatar");
 
-async function chargerMonAvatar() {
+// Remplit la page paramètres ou l'avatar de l'accueil avec les infos du compte
+async function chargerMesInfos() {
     const { data, error } = await supabaseClient.auth.getUser();
     if (error || data.user === null) {
         return;
     }
 
     const infos = data.user.user_metadata;
-    monAvatar.title = infos.pseudo || "";
 
-    if (infos.avatar) {
-        const image = document.createElement("img");
-        image.src = infos.avatar;
-        image.alt = "Mon avatar";
-        monAvatar.appendChild(image);
-    } else if (infos.pseudo) {
-        monAvatar.textContent = initiales(infos.pseudo);
-        monAvatar.style.backgroundColor = couleurAvatar(infos.pseudo);
+    if (formProfil) {
+        document.getElementById("pseudo").value = infos.pseudo || "";
+        document.getElementById("email").value = data.user.email;
+        document.getElementById("prenom").value = infos.prenom || "";
+        document.getElementById("nom").value = infos.nom || "";
+
+        if (infos.avatar) {
+            afficherAvatarProfil(infos.avatar);
+        }
+    }
+
+    if (monAvatar) {
+        monAvatar.title = infos.pseudo || "";
+
+        if (infos.avatar) {
+            const image = document.createElement("img");
+            image.src = infos.avatar;
+            image.alt = "Mon avatar";
+            monAvatar.appendChild(image);
+        } else if (infos.pseudo) {
+            monAvatar.textContent = initiales(infos.pseudo);
+            monAvatar.style.backgroundColor = couleurAvatar(infos.pseudo);
+        }
     }
 }
 
-if (monAvatar) {
-    chargerMonAvatar();
+if (formProfil || monAvatar) {
+    chargerMesInfos();
 }
