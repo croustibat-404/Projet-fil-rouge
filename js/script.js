@@ -935,3 +935,48 @@ if (lecteurStory) {
         lecteurStory.classList.remove("en_pause");
     });
 }
+
+const boutonAjoutStory = document.getElementById("bouton_ajout_story");
+const inputStory = document.getElementById("input_story");
+
+// CELIAN A COMPLETER AVEC SUPABASE ICI
+// ajouter la story dans la table puis renvoyer "" si tout s'est bien passé, ou un message d'erreur sinon.
+async function publierStory(fichier, texte) {
+    return "La publication de story n'est pas encore reliée au serveur.";
+}
+
+if (boutonAjoutStory) {
+    boutonAjoutStory.addEventListener("click", function () {
+        inputStory.click();
+    });
+
+    inputStory.addEventListener("change", async function () {
+        const fichier = inputStory.files[0];
+        // On vide le champ pour pouvoir choisir la même image une prochaine fois
+        inputStory.value = "";
+
+        if (!fichier) {
+            return;
+        }
+        if (!["image/png", "image/jpeg", "image/webp"].includes(fichier.type)) {
+            alert("L'image doit être au format PNG, JPG ou WEBP.");
+            return;
+        }
+        if (fichier.size > 5 * 1024 * 1024) {
+            alert("L'image ne doit pas dépasser 5 Mo.");
+            return;
+        }
+
+        const texte = prompt("Ajoutez une légende (facultatif) :");
+        if (texte === null) {
+            return;
+        }
+
+        const erreur = await publierStory(fichier, texte.trim());
+        if (erreur !== "") {
+            alert(erreur);
+            return;
+        }
+        alert("Story publiée !");
+    });
+}
