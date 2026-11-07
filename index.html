@@ -103,6 +103,28 @@
         </div>
     </dialog>
 
+    <!-- ===== Lecteur de story ===== -->
+    <dialog class="lecteur_story" id="lecteur_story" aria-label="Story">
+        <div class="story_progression" id="story_progression"></div>
+
+        <div class="story_entete">
+            <span class="avatar_contact" id="story_avatar"></span>
+            <div class="story_infos">
+                <span class="story_pseudo" id="story_pseudo"></span>
+                <span class="story_date" id="story_date"></span>
+            </div>
+            <button type="button" class="story_fermer" data-fermer aria-label="Fermer la story">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <img class="story_image" id="story_image" alt="">
+        <p class="story_texte" id="story_texte"></p>
+
+        <button type="button" class="story_zone story_precedente" id="story_precedente" aria-label="Story précédente"></button>
+        <button type="button" class="story_zone story_suivante" id="story_suivante" aria-label="Story suivante"></button>
+    </dialog>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
     <script src="js/script.js"></script>
