@@ -1181,3 +1181,50 @@ input[type="submit"]:disabled {
         display: none;
     }
 }
+
+/* --- Lecteur de story --- */
+
+.lecteur_story {
+    width: 420px;
+    max-width: 100%;
+    height: min(740px, 100vh);
+    max-height: 100vh;
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+    background-color: black;
+    color: white;
+    overflow: hidden;
+}
+
+.lecteur_story::backdrop {
+    background-color: rgba(0, 0, 0, 0.85);
+}
+
+/* Dégradé sombre en haut pour garder l'en-tête lisible sur une image claire */
+.lecteur_story::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), transparent);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.story_image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+@media (max-width: 480px) {
+    .lecteur_story {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+    }
+}
