@@ -80,10 +80,6 @@ legend {
     margin-bottom: 14px;
 }
 
-.champ br {
-    display: none;
-}
-
 .ligne_inscription {
     display: grid;
     grid-template-columns: 1fr 1fr;
