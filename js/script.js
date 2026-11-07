@@ -751,3 +751,23 @@ async function chargerProfil() {
 if (formProfil) {
     chargerProfil();
 }
+
+const avatarsProposes = document.querySelectorAll(".avatar_propose");
+const avatarProfil = document.getElementById("avatar_profil");
+const apercuAvatar = document.getElementById("apercu_avatar");
+
+function afficherAvatarProfil(url) {
+    apercuAvatar.src = url;
+    avatarProfil.classList.add("avec_photo");
+
+    for (let bouton of avatarsProposes) {
+        const estChoisi = bouton.querySelector("img").src === url;
+        bouton.setAttribute("aria-pressed", estChoisi ? "true" : "false");
+    }
+}
+
+for (let bouton of avatarsProposes) {
+    bouton.addEventListener("click", function () {
+        afficherAvatarProfil(bouton.querySelector("img").src);
+    });
+}
