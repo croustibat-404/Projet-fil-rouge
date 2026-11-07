@@ -1096,6 +1096,147 @@ input[type="submit"]:disabled {
     object-fit: contain;
 }
 
+.story_progression {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    gap: 4px;
+    z-index: 2;
+}
+
+.story_segment {
+    flex: 1;
+    height: 3px;
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.35);
+    overflow: hidden;
+}
+
+.story_remplissage {
+    display: block;
+    width: 0;
+    height: 100%;
+    background-color: white;
+}
+
+.story_segment.vu .story_remplissage {
+    width: 100%;
+}
+
+.story_segment.en_cours .story_remplissage {
+    animation: avancer_story 5s linear forwards;
+}
+
+.lecteur_story.en_pause .story_segment.en_cours .story_remplissage {
+    animation-play-state: paused;
+}
+
+@keyframes avancer_story {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+.story_entete {
+    position: absolute;
+    top: 22px;
+    left: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 2;
+}
+
+.story_entete .avatar_contact {
+    border-color: white;
+}
+
+.story_infos {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.story_pseudo {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: bold;
+}
+
+.story_date {
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+.story_fermer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.story_fermer:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.story_texte {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 24px;
+    margin: 0;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.55);
+    text-align: center;
+    overflow-wrap: anywhere;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.story_texte:empty {
+    display: none;
+}
+
+/* Zones invisibles : clic à gauche = précédente, clic à droite = suivante */
+.story_zone {
+    position: absolute;
+    top: 70px;
+    bottom: 0;
+    width: 35%;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.story_precedente {
+    left: 0;
+}
+
+.story_suivante {
+    right: 0;
+}
+
 @media (max-width: 480px) {
     .lecteur_story {
         width: 100%;

@@ -777,3 +777,147 @@ async function chargerMesInfos() {
 if (formProfil || monAvatar) {
     chargerMesInfos();
 }
+
+const lecteurStory = document.getElementById("lecteur_story");
+const storyProgression = document.getElementById("story_progression");
+const storyAvatar = document.getElementById("story_avatar");
+const storyPseudo = document.getElementById("story_pseudo");
+const storyDate = document.getElementById("story_date");
+const storyImage = document.getElementById("story_image");
+const storyTexte = document.getElementById("story_texte");
+const storyPrecedente = document.getElementById("story_precedente");
+const storySuivante = document.getElementById("story_suivante");
+
+let storiesEnCours = [];
+let indexStory = 0;
+let debutAppui = 0;
+
+function tempsEcoule(date) {
+    const minutes = Math.floor((Date.now() - new Date(date).getTime()) / 60000);
+    if (minutes < 1) {
+        return "à l'instant";
+    }
+    if (minutes < 60) {
+        return "il y a " + minutes + " min";
+    }
+    return "il y a " + Math.floor(minutes / 60) + " h";
+}
+
+function afficherStory(index) {
+    indexStory = index;
+    const story = storiesEnCours[index];
+
+    storyImage.src = story.image;
+    storyImage.alt = "Story de " + storyPseudo.textContent;
+    storyTexte.textContent = story.texte || "";
+    storyDate.textContent = story.date ? tempsEcoule(story.date) : "";
+
+    // La barre attend que l'image soit chargée avant d'avancer
+    lecteurStory.classList.toggle("en_pause", !storyImage.complete);
+
+    const segments = storyProgression.children;
+    for (let i = 0; i < segments.length; i++) {
+        segments[i].classList.remove("vu", "en_cours");
+        if (i < index) {
+            segments[i].classList.add("vu");
+        }
+    }
+    // Force le navigateur à relancer l'animation de la barre
+    void segments[index].offsetWidth;
+    segments[index].classList.add("en_cours");
+}
+
+function allerStorySuivante() {
+    if (indexStory < storiesEnCours.length - 1) {
+        afficherStory(indexStory + 1);
+    } else {
+        lecteurStory.close();
+    }
+}
+
+function allerStoryPrecedente() {
+    afficherStory(Math.max(indexStory - 1, 0));
+}
+
+// stories : tableau de { image, texte, date }
+function ouvrirStory(contact, stories) {
+    if (!lecteurStory || stories.length === 0) {
+        return;
+    }
+
+    storiesEnCours = stories;
+    storyPseudo.textContent = contact.pseudo;
+    storyAvatar.textContent = initiales(contact.pseudo);
+    storyAvatar.style.backgroundColor = couleurAvatar(contact.pseudo);
+
+    storyProgression.textContent = "";
+    for (let i = 0; i < stories.length; i++) {
+        const segment = document.createElement("span");
+        segment.classList.add("story_segment");
+        const remplissage = document.createElement("span");
+        remplissage.classList.add("story_remplissage");
+        segment.appendChild(remplissage);
+        storyProgression.appendChild(segment);
+    }
+
+    lecteurStory.showModal();
+    afficherStory(0);
+}
+
+if (lecteurStory) {
+    // Quand la barre en cours est pleine, on passe à la story suivante
+    storyProgression.addEventListener("animationend", allerStorySuivante);
+
+    for (let evenement of ["load", "error"]) {
+        storyImage.addEventListener(evenement, function () {
+            lecteurStory.classList.remove("en_pause");
+        });
+    }
+
+    // Maintenir le clic sur la story la met en pause, un clic rapide change de story
+    for (let zone of [storyPrecedente, storySuivante]) {
+        zone.addEventListener("pointerdown", function () {
+            debutAppui = Date.now();
+            lecteurStory.classList.add("en_pause");
+        });
+        zone.addEventListener("pointerup", function () {
+            lecteurStory.classList.remove("en_pause");
+        });
+        zone.addEventListener("pointerleave", function () {
+            lecteurStory.classList.remove("en_pause");
+        });
+    }
+
+    storyPrecedente.addEventListener("click", function (event) {
+        if (event.detail === 0 || Date.now() - debutAppui < 250) {
+            allerStoryPrecedente();
+        }
+    });
+
+    storySuivante.addEventListener("click", function (event) {
+        if (event.detail === 0 || Date.now() - debutAppui < 250) {
+            allerStorySuivante();
+        }
+    });
+
+    lecteurStory.addEventListener("keydown", function (event) {
+        if (event.key === "ArrowRight") {
+            allerStorySuivante();
+        } else if (event.key === "ArrowLeft") {
+            allerStoryPrecedente();
+        }
+    });
+
+    lecteurStory.addEventListener("click", function (event) {
+        if (event.target === lecteurStory) {
+            lecteurStory.close();
+        }
+    });
+
+    lecteurStory.addEventListener("close", function () {
+        storiesEnCours = [];
+        storyProgression.textContent = "";
+        storyImage.removeAttribute("src");
+        lecteurStory.classList.remove("en_pause");
+    });
+}
