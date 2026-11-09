@@ -34,6 +34,7 @@
                 <button type="button" class="onglet" id="onglet_contacts" role="tab"
                         aria-selected="false" aria-controls="panneau_contacts" data-onglet="contacts">
                     <i class="fa-solid fa-address-book"></i> Contacts
+                    <span class="badge_demandes" id="badge_demandes" title="Demandes d'ami reçues" hidden></span>
                 </button>
             </div>
 
@@ -46,6 +47,11 @@
 
             <!-- ===== Panneau Contacts ===== -->
             <div class="panneau" id="panneau_contacts" role="tabpanel" aria-labelledby="onglet_contacts" hidden>
+                <!-- Demandes d'ami reçues (cachées s'il n'y en a pas) -->
+                <div class="demandes_amis" id="demandes_amis" hidden>
+                    <p class="titre_demandes">Demandes d'ami reçues</p>
+                    <ul class="liste_demandes" id="liste_demandes"></ul>
+                </div>
                 <div class="recherche_contact">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="search" id="recherche_contact" placeholder="Rechercher…"
@@ -58,7 +64,7 @@
                     <p id="texte_contacts_vide"></p>
                 </div>
                 <button type="button" class="bouton_ajout_contact" id="bouton_ajout_contact">
-                    <i class="fa-solid"></i> Ajouter un contact
+                    <i class="fa-solid fa-user-plus"></i> Ajouter un contact
                 </button>
             </div>
         </aside>
@@ -66,7 +72,7 @@
         <!-- ===== Zone de discussion ===== -->
         <section class="colonne_discussion">
             <div class="entete entete_discussion">
-                <div class="avatar"></div>
+                <div class="avatar" id="avatar_discussion"></div>
                 <span class="nom_contact" id="nom-contact">Contact</span>
             </div>
 

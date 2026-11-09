@@ -82,7 +82,7 @@ async function verifierSession() {
     if (!estConnecte && !pagePublique) {
         window.location.href = "connexion.html";
     } else if (estConnecte && pagePublique) {
-        window.location.href = "./";
+        window.location.href = "index.html";
     }
 }
 
@@ -122,11 +122,25 @@ async function chargerMessages(conversationId) {
     }
 }
 
+// Pseudo et avatar d'un utilisateur (null si introuvable)
+async function infosProfil(id) {
+    let reponse = await supabaseClient.from("profiles").select("pseudo, avatar").eq("id", id);
+    if (reponse.error) {
+        // La colonne avatar n'existe pas encore dans la base : on se contente du pseudo
+        reponse = await supabaseClient.from("profiles").select("pseudo").eq("id", id);
+    }
+    if (reponse.error || reponse.data.length === 0) {
+        return null;
+    }
+    return reponse.data[0];
+}
+
 // Ouvre une conversation : en-tête, sélection, saisie, messages
-async function ouvrirConversation(conversationId, pseudo) {
+async function ouvrirConversation(conversationId, pseudo, avatar) {
     conversationActive = conversationId;
     const entete = document.querySelector(".nom_contact");
     entete.textContent = pseudo;
+    remplirAvatar(document.getElementById("avatar_discussion"), pseudo, avatar);
     for (let conv of document.querySelectorAll(".conversation")) {
         conv.classList.remove("conversation_active");
     }
@@ -172,16 +186,12 @@ async function chargerConversations() {
             console.warn("Aucun autre membre trouvé pour la conversation :", conv.conversation_id);
             continue;
         }
-        const { data: dataPseudo, error: errorPseudo } = await supabaseClient.from("profiles").select("pseudo").eq("id", dataConversation[0].user_id);
-        if (errorPseudo) {
-            console.error("Erreur lors de la récupération du pseudo :", errorPseudo);
-            continue;
-        }
-        if (dataPseudo.length === 0) {
+        const profil = await infosProfil(dataConversation[0].user_id);
+        if (profil === null) {
             continue;
         }
 
-        resultats.push({ id: conv.conversation_id, pseudo: dataPseudo[0].pseudo });
+        resultats.push({ id: conv.conversation_id, pseudo: profil.pseudo, avatar: profil.avatar });
     }
 
     // On vide puis on remplit d'un coup : pas de doublons si deux chargements se chevauchent
@@ -189,7 +199,7 @@ async function chargerConversations() {
     for (let conv of resultats) {
         const conversation = document.createElement("li");
         conversation.addEventListener("click", function () {
-            ouvrirConversation(conv.id, conv.pseudo);
+            ouvrirConversation(conv.id, conv.pseudo, conv.avatar);
         });
         conversation.classList.add("conversation");
         conversation.id = "conv-" + conv.id;
@@ -199,6 +209,7 @@ async function chargerConversations() {
 
         const avatar = document.createElement("div");
         avatar.classList.add("petit_avatar");
+        remplirAvatar(avatar, conv.pseudo, conv.avatar);
 
         const span = document.createElement("span");
         span.textContent = conv.pseudo;
@@ -254,7 +265,7 @@ if (formConnexion) {
             await assurerProfil(dataConnexion.user);
             reussi = true;
             afficherSucces("Connexion réussie !");
-            window.location.href = "./";
+            window.location.href = "index.html";
         } catch (e) {
             afficherErreur("Problème de connexion au serveur, réessaie.");
         } finally {
@@ -358,7 +369,7 @@ if (formInscription) {
             await assurerProfil(dataInscription.user);
             reussi = true;
             afficherSucces("Compte créé ! Redirection...");
-            window.location.href = "./";
+            window.location.href = "index.html";
         } catch (e) {
             afficherErreur("Problème de connexion au serveur, réessaie.");
         } finally {
@@ -644,6 +655,22 @@ function couleurAvatar(texte) {
     return "hsl(" + ((somme * 37) % 360) + ", 55%, 45%)";
 }
 
+// Affiche l'avatar choisi, ou à défaut les initiales sur un fond coloré
+function remplirAvatar(element, pseudo, avatar) {
+    element.textContent = "";
+    element.style.backgroundColor = "";
+
+    if (avatar) {
+        const image = document.createElement("img");
+        image.src = avatar;
+        image.alt = "";
+        element.appendChild(image);
+    } else if (pseudo) {
+        element.textContent = initiales(pseudo);
+        element.style.backgroundColor = couleurAvatar(pseudo);
+    }
+}
+
 // Construit la ligne HTML d'un contact
 function creerLigneContact(contact) {
     const ligne = document.createElement("li");
@@ -655,8 +682,7 @@ function creerLigneContact(contact) {
 
     const avatar = document.createElement("span");
     avatar.classList.add("avatar_contact");
-    avatar.style.backgroundColor = couleurAvatar(contact.pseudo);
-    avatar.textContent = initiales(contact.pseudo);
+    remplirAvatar(avatar, contact.pseudo, contact.avatar);
 
     // Cliquer sur la photo d'un contact qui a une story l'ouvre
     if (contact.stories && contact.stories.length > 0) {
@@ -681,7 +707,12 @@ function creerLigneContact(contact) {
 
     const statut = document.createElement("span");
     statut.classList.add("contact_statut");
-    statut.textContent = ((contact.prenom || "") + " " + (contact.nom || "")).trim();
+    if (contact.enAttente) {
+        ligne.classList.add("en_attente");
+        statut.textContent = "Demande envoyée";
+    } else {
+        statut.textContent = ((contact.prenom || "") + " " + (contact.nom || "")).trim();
+    }
 
     infos.appendChild(nom);
     infos.appendChild(statut);
@@ -755,7 +786,90 @@ if (rechercheContact) {
 
 afficherContacts();
 
-// Charge mes contacts et leurs stories depuis la base
+// ---------- Demandes d'ami ----------
+// Une ligne de la table contacts = une relation entre deux personnes :
+// user_id a envoyé la demande à contact_id, statut "en_attente" puis "accepte"
+let demandesRecues = [];
+
+const zoneDemandes = document.getElementById("demandes_amis");
+const listeDemandes = document.getElementById("liste_demandes");
+const badgeDemandes = document.getElementById("badge_demandes");
+
+// Affiche les demandes reçues et le nombre sur l'onglet Contacts
+function afficherDemandes() {
+    if (!zoneDemandes) {
+        return;
+    }
+
+    listeDemandes.textContent = "";
+    for (let demande of demandesRecues) {
+        const ligne = document.createElement("li");
+        ligne.classList.add("demande");
+
+        const avatar = document.createElement("span");
+        avatar.classList.add("avatar_contact");
+        remplirAvatar(avatar, demande.pseudo, demande.avatar);
+
+        const nom = document.createElement("span");
+        nom.classList.add("demande_nom");
+        nom.textContent = demande.pseudo;
+
+        const accepter = document.createElement("button");
+        accepter.type = "button";
+        accepter.classList.add("demande_accepter");
+        accepter.title = "Accepter";
+        accepter.setAttribute("aria-label", "Accepter la demande de " + demande.pseudo);
+        accepter.innerHTML = '<i class="fa-solid fa-check"></i>';
+        accepter.addEventListener("click", function () {
+            repondreDemande(demande, true);
+        });
+
+        const refuser = document.createElement("button");
+        refuser.type = "button";
+        refuser.classList.add("demande_refuser");
+        refuser.title = "Refuser";
+        refuser.setAttribute("aria-label", "Refuser la demande de " + demande.pseudo);
+        refuser.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+        refuser.addEventListener("click", function () {
+            repondreDemande(demande, false);
+        });
+
+        ligne.appendChild(avatar);
+        ligne.appendChild(nom);
+        ligne.appendChild(accepter);
+        ligne.appendChild(refuser);
+        listeDemandes.appendChild(ligne);
+    }
+
+    zoneDemandes.hidden = demandesRecues.length === 0;
+    badgeDemandes.hidden = demandesRecues.length === 0;
+    badgeDemandes.textContent = demandesRecues.length;
+}
+
+// Accepte (accepter = true) ou refuse une demande reçue
+async function repondreDemande(demande, accepter) {
+    const monId = await idUtilisateur();
+    if (monId === null) {
+        alert("Une erreur est survenue.");
+        return;
+    }
+
+    let requete = supabaseClient.from("contacts");
+    requete = accepter ? requete.update({ statut: "accepte" }) : requete.delete();
+
+    const { error } = await requete
+        .eq("user_id", demande.id)
+        .eq("contact_id", monId);
+    if (error) {
+        console.error("Erreur lors de la réponse à la demande :", error);
+        alert("Une erreur est survenue.");
+        return;
+    }
+
+    await chargerContacts();
+}
+
+// Charge mes contacts (dans les deux sens), leurs stories et les demandes reçues
 async function chargerContacts() {
     if (!listeContactsHTML) {
         return;
@@ -765,46 +879,83 @@ async function chargerContacts() {
         return;
     }
 
-    const { data: mesContacts, error: errorContacts } = await supabaseClient
+    const { data: relations, error: errorContacts } = await supabaseClient
         .from("contacts")
-        .select("contact_id")
-        .eq("user_id", monId);
+        .select("*")
+        .or("user_id.eq." + monId + ",contact_id.eq." + monId);
     if (errorContacts) {
         console.error("Erreur lors de la récupération des contacts :", errorContacts);
         return;
     }
 
     const nouvelleListe = [];
+    const nouvellesDemandes = [];
+    const dejaVus = [];
 
-    for (let contact of mesContacts) {
-        const { data: dataProfil, error: errorProfil } = await supabaseClient
-            .from("profiles")
-            .select("pseudo")
-            .eq("id", contact.contact_id);
-        if (errorProfil || dataProfil.length === 0) {
+    for (let relation of relations) {
+        const autreId = relation.user_id === monId ? relation.contact_id : relation.user_id;
+        if (dejaVus.includes(autreId)) {
+            continue;
+        }
+        dejaVus.push(autreId);
+
+        const profil = await infosProfil(autreId);
+        if (profil === null) {
+            continue;
+        }
+        const personne = { id: autreId, pseudo: profil.pseudo, avatar: profil.avatar };
+
+        // Sans colonne statut (ancienne base), la relation compte comme acceptée
+        const statut = relation.statut || "accepte";
+
+        if (statut === "en_attente" && relation.contact_id === monId) {
+            nouvellesDemandes.push(personne);
             continue;
         }
 
-        const { data: dataStories, error: errorStories } = await supabaseClient
-            .from("stories")
-            .select("*")
-            .eq("user_id", contact.contact_id)
-            .gte("created_at", limiteStories())
-            .order("created_at", { ascending: true });
-        if (errorStories) {
-            console.error("Erreur lors de la récupération des stories :", errorStories);
-            continue;
-        }
+        if (statut === "en_attente") {
+            personne.enAttente = true;
+        } else {
+            const { data: dataStories, error: errorStories } = await supabaseClient
+                .from("stories")
+                .select("*")
+                .eq("user_id", autreId)
+                .gte("created_at", limiteStories())
+                .order("created_at", { ascending: true });
+            if (errorStories) {
+                console.error("Erreur lors de la récupération des stories :", errorStories);
+            } else {
+                personne.stories = convertirStories(dataStories);
+            }
 
-        nouvelleListe.push({
-            id: contact.contact_id,
-            pseudo: dataProfil[0].pseudo,
-            stories: convertirStories(dataStories)
-        });
+            // On garde le cercle gris si la story avait déjà été vue
+            for (let ancien of listeDeContacts) {
+                if (ancien.id === autreId && ancien.storyVue) {
+                    personne.storyVue = true;
+                }
+            }
+        }
+        nouvelleListe.push(personne);
     }
 
     listeDeContacts = nouvelleListe;
+    demandesRecues = nouvellesDemandes;
     afficherContacts();
+    afficherDemandes();
+}
+
+// Temps réel : recharge les contacts quand une demande arrive ou est acceptée
+function ecouterContacts() {
+    supabaseClient
+        .channel("contacts_en_direct")
+        .on("postgres_changes", { event: "*", schema: "public", table: "contacts" }, function () {
+            chargerContacts();
+        })
+        .subscribe();
+}
+
+if (listeContactsHTML) {
+    ecouterContacts();
 }
 
 for (let boutonFermer of document.querySelectorAll("[data-fermer]")) {
@@ -872,7 +1023,18 @@ if (boutonAjoutContact) {
 
         for (let contact of listeDeContacts) {
             if (contact.pseudo === pseudo) {
-                alert("Cette personne est déjà dans vos contacts.");
+                alert(contact.enAttente
+                    ? "Vous avez déjà envoyé une demande à cette personne."
+                    : "Cette personne est déjà dans vos contacts.");
+                return;
+            }
+        }
+
+        // Si cette personne nous avait déjà envoyé une demande, on l'accepte directement
+        for (let demande of demandesRecues) {
+            if (demande.pseudo === pseudo) {
+                await repondreDemande(demande, true);
+                alert(pseudo + " vous avait déjà envoyé une demande : vous êtes maintenant contacts !");
                 return;
             }
         }
@@ -882,7 +1044,7 @@ if (boutonAjoutContact) {
             alert(erreur);
             return;
         }
-        afficherContacts();
+        alert("Demande d'ami envoyée à " + pseudo + " !");
     });
 }
 
@@ -906,11 +1068,12 @@ if (confirmerRetraitContact) {
             return;
         }
 
+        // La relation peut avoir été créée par l'un ou par l'autre
+        const autreId = contactARetirer.id;
         const { error } = await supabaseClient
             .from("contacts")
             .delete()
-            .eq("user_id", monId)
-            .eq("contact_id", contactARetirer.id);
+            .or("and(user_id.eq." + monId + ",contact_id.eq." + autreId + "),and(user_id.eq." + autreId + ",contact_id.eq." + monId + ")");
         if (error) {
             console.error("Erreur lors du retrait du contact :", error);
             alert("Impossible de retirer ce contact.");
@@ -1010,6 +1173,17 @@ async function enregistrerAvatar(url) {
         messageProfil.className = "message_formulaire";
         return;
     }
+
+    // Copie dans profiles pour que les autres utilisateurs voient aussi l'avatar
+    const monId = await idUtilisateur();
+    const { error: errorProfil } = await supabaseClient
+        .from("profiles")
+        .update({ avatar: url })
+        .eq("id", monId);
+    if (errorProfil) {
+        console.error("Erreur lors de la copie de l'avatar dans profiles :", errorProfil);
+    }
+
     messageProfil.textContent = "Avatar enregistré !";
     messageProfil.className = "message_formulaire succes";
 }
@@ -1049,16 +1223,7 @@ async function chargerMesInfos() {
     if (monAvatar) {
         monAvatar.title = infos.pseudo || "";
         document.getElementById("mon_pseudo").textContent = infos.pseudo || "";
-
-        if (infos.avatar) {
-            const image = document.createElement("img");
-            image.src = infos.avatar;
-            image.alt = "Mon avatar";
-            monAvatar.appendChild(image);
-        } else if (infos.pseudo) {
-            monAvatar.textContent = initiales(infos.pseudo);
-            monAvatar.style.backgroundColor = couleurAvatar(infos.pseudo);
-        }
+        remplirAvatar(monAvatar, infos.pseudo, infos.avatar);
     }
 }
 
@@ -1222,8 +1387,7 @@ function ouvrirStory(contact, stories) {
 
     storiesEnCours = stories;
     storyPseudo.textContent = contact.pseudo;
-    storyAvatar.textContent = initiales(contact.pseudo);
-    storyAvatar.style.backgroundColor = couleurAvatar(contact.pseudo);
+    remplirAvatar(storyAvatar, contact.pseudo, contact.avatar);
 
     storyProgression.textContent = "";
     for (let i = 0; i < stories.length; i++) {
@@ -1360,17 +1524,19 @@ async function chargerMesStories() {
     }
 
     monPseudo = dataUser.user.user_metadata.pseudo || "";
+    monAvatarUrl = dataUser.user.user_metadata.avatar || "";
     mesStories = convertirStories(data);
     monAvatar.classList.toggle("a_story", mesStories.length > 0);
 }
 
 let monPseudo = "";
+let monAvatarUrl = "";
 
 if (monAvatar) {
     monAvatar.addEventListener("click", function () {
         if (mesStories.length > 0) {
             monAvatar.classList.add("story_vue");
-            ouvrirStory({ pseudo: monPseudo }, mesStories);
+            ouvrirStory({ pseudo: monPseudo, avatar: monAvatarUrl }, mesStories);
         }
     });
 }
