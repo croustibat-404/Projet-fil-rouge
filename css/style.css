@@ -1,3 +1,4 @@
+/* ---------- Base ---------- */
 * {
     box-sizing: border-box;
 }
@@ -23,6 +24,7 @@ article {
     overflow: hidden;
 }
 
+/* ---------- Pages connexion et inscription ---------- */
 .page_connexion,
 .page_inscription {
     min-height: 100vh;
@@ -71,6 +73,7 @@ legend {
     color: #666;
 }
 
+/* Champs de formulaire */
 .champ,
 .champ_inscription {
     clear: both;
@@ -110,6 +113,7 @@ legend {
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
 }
 
+/* Bouton d'envoi des formulaires */
 input[type="submit"] {
     display: block;
     width: 100%;
@@ -129,6 +133,7 @@ input[type="submit"]:hover {
     background-color: #0062cc;
 }
 
+/* Messages d'erreur et de succès */
 #message {
     margin: 0 0 10px;
     font-size: 0.9rem;
@@ -173,6 +178,7 @@ input[type="submit"]:hover {
 }
 
 
+/* ---------- Messagerie : en-têtes et avatars ---------- */
 .entete {
     display: flex;
     align-items: center;
@@ -187,6 +193,7 @@ input[type="submit"]:hover {
     justify-content: space-between;
 }
 
+/* Avatar rond (le cercle bleu n'apparaît que s'il y a une story) */
 .avatar {
     display: flex;
     justify-content: center;
@@ -195,9 +202,18 @@ input[type="submit"]:hover {
     width: 50px;
     border-radius: 50%;
     border: solid 2px black;
-    box-shadow: 0 0 0 3px white, 0 0 0 5px rgb(0, 217, 255);
     overflow: hidden;
     flex-shrink: 0;
+}
+
+/* Cercle autour de mon avatar quand j'ai une story */
+.avatar.a_story {
+    box-shadow: 0 0 0 3px white, 0 0 0 5px rgb(0, 217, 255);
+    cursor: pointer;
+}
+
+.avatar.a_story.story_vue {
+    box-shadow: 0 0 0 3px white, 0 0 0 5px #bbb;
 }
 
 .avatar img {
@@ -219,6 +235,7 @@ input[type="submit"]:hover {
     font-weight: bold;
 }
 
+/* Boutons ronds (paramètres, retour) */
 .bouton_menu,
 .bouton_quitter {
     display: flex;
@@ -243,6 +260,7 @@ input[type="submit"]:hover {
     margin: 20px;
 }
 
+/* ---------- Colonne des conversations ---------- */
 .colonne_conversation {
     display: flex;
     flex-direction: column;
@@ -275,6 +293,7 @@ input[type="submit"]:hover {
 }
 
 .nouvelle_conversation,
+/* Bouton "Ajouter un contact" */
 .bouton_ajout_contact {
     display: flex;
     justify-content: center;
@@ -303,6 +322,7 @@ input[type="submit"]:hover {
     background-color: #004085;
 }
 
+/* ---------- Zone de discussion ---------- */
 .colonne_discussion {
     display: flex;
     flex-direction: column;
@@ -334,6 +354,7 @@ input[type="submit"]:hover {
     justify-content: flex-start;
 }
 
+/* Bulles de messages */
 .bulle_message {
     display: flex;
     flex-direction: column;
@@ -379,6 +400,7 @@ input[type="submit"]:hover {
     background-color: rgba(2, 59, 145, 0.397);
 }
 
+/* Saisie d'un message */
 .zone_message {
     display: flex;
     align-items: center;
@@ -438,6 +460,7 @@ input[type="submit"]:hover {
     }
 }
 
+/* ---------- Page des paramètres ---------- */
 body.page_parametres {
     overflow-y: auto;
 }
@@ -740,6 +763,7 @@ body.page_parametres {
         width: 100%;
     }
 }
+/* Curseur d'attente pendant un chargement */
 body.chargement,
 body.chargement * {
     cursor: wait !important;
@@ -750,6 +774,7 @@ input[type="submit"]:disabled {
     cursor: not-allowed;
 }
 
+/* ---------- Onglets Discussions / Contacts ---------- */
 .onglets {
     display: flex;
     border-bottom: 1px solid #ddd;
@@ -867,6 +892,7 @@ input[type="submit"]:disabled {
     font-weight: bold;
 }
 
+/* Ligne d'un contact */
 .contact {
     display: flex;
     align-items: center;
@@ -893,6 +919,7 @@ input[type="submit"]:disabled {
     cursor: pointer;
 }
 
+/* Avatar d'un contact (initiales sur fond de couleur) */
 .avatar_contact {
     position: relative;
     display: flex;
@@ -929,6 +956,7 @@ input[type="submit"]:disabled {
     box-shadow: 0 0 0 2px white, 0 0 0 4px #bbb;
 }
 
+/* Pastille de statut */
 .pastille {
     position: absolute;
     right: -4px;
@@ -1103,11 +1131,18 @@ input[type="submit"]:disabled {
     z-index: 1;
 }
 
-.story_image {
+.story_image,
+.story_video {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+/* "display: block" ci-dessus annulerait l'attribut hidden */
+.story_image[hidden],
+.story_video[hidden] {
+    display: none;
 }
 
 .story_progression {

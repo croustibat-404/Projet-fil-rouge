@@ -9,6 +9,7 @@
 </head>
 <body class="page_connexion">
     <div class="connexion_container">
+        <!-- Formulaire de connexion (vérifié et envoyé par script.js) -->
         <form id="form_connexion" method="post">
             <fieldset class="connexion">
                 <legend>Formulaire de connexion</legend>
@@ -18,6 +19,7 @@
                 <div class="champ">
                     <label for="id_pass">Mot de passe :</label><input type="password" name="pass" id="id_pass" required>
                 </div>
+                <!-- Message d'erreur ou de succès -->
                 <p id="message"></p>
                 <p id="text_nouv">Vous êtes nouveau ? Alors créez-vous un compte <a href="inscription.html">ici</a></p>
                 <input type="submit" name="connect" value="Connexion">
@@ -25,6 +27,7 @@
         </form>
     </div>
     
+    <!-- Bibliothèque Supabase, configuration, puis script de la page -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
     <script src="js/script.js"></script>

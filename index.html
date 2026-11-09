@@ -9,15 +9,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Accueil : conversations et contacts à gauche, discussion à droite -->
     <article class="accueil">
         <aside class="colonne_conversation">
+            <!-- Mon avatar (+ bouton pour publier une story) et accès aux paramètres -->
             <div class="entete entete_conversation">
                 <div class="mon_profil">
                     <div class="avatar" id="mon_avatar"></div>
                     <button type="button" class="ajout_story" id="bouton_ajout_story" title="Publier une story">
                         <i class="fa-solid fa-plus"></i>
                     </button>
-                    <input type="file" id="input_story" accept="image/png, image/jpeg, image/webp" hidden>
+                    <input type="file" id="input_story" accept="image/png, image/jpeg, image/webp, video/mp4, video/webm" hidden>
                 </div>
                 <a href="parametres.html" class="bouton_menu" title="Paramètres du compte"><i class="fa-solid fa-gear"></i></a>
             </div>
@@ -60,6 +62,7 @@
             </div>
         </aside>
 
+        <!-- ===== Zone de discussion ===== -->
         <section class="colonne_discussion">
             <div class="entete entete_discussion">
                 <div class="avatar"></div>
@@ -68,6 +71,7 @@
 
             <div class="liste_message" id="liste_message" data-vide="Sélectionnez une conversation pour commencer à discuter"></div>
 
+            <!-- Saisie d'un message (désactivée tant qu'aucune conversation n'est ouverte) -->
             <form class="zone_message" id="formulaire-message">
                 <input type="text" class="champ_message" id="champ-message" placeholder="Sélectionnez une conversation" autocomplete="off" disabled>
 
@@ -107,12 +111,14 @@
         </div>
 
         <img class="story_image" id="story_image" alt="">
+        <video class="story_video" id="story_video" playsinline hidden></video>
         <p class="story_texte" id="story_texte"></p>
 
         <button type="button" class="story_zone story_precedente" id="story_precedente" aria-label="Story précédente"></button>
         <button type="button" class="story_zone story_suivante" id="story_suivante" aria-label="Story suivante"></button>
     </dialog>
 
+    <!-- Bibliothèque Supabase, configuration, puis script de la page -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
     <script src="js/script.js"></script>

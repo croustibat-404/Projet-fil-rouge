@@ -9,6 +9,7 @@
 </head>
 <body class="page_inscription">
     <div class="inscription_container">
+        <!-- Formulaire d'inscription (vérifié et envoyé par script.js) -->
         <form id="form_inscription" class="inscription" method="post">
             <h1>Créer un compte</h1>
             <p class="sous_titre">Remplissez le formulaire pour vous inscrire.</p>
@@ -49,6 +50,7 @@
                 <input type="password" name="pass_confirm" id="id_pass_confirm" required>
             </div>
 
+            <!-- Message d'erreur ou de succès -->
             <p id="message" class=""></p>
 
             <input type="submit" name="connect" value="S'inscrire">
@@ -57,6 +59,7 @@
             <p id="text_nouv">Vous êtes déjà inscrit ? <a href="connexion.html">Connectez-vous</a></p>
         </form>
     </div>
+    <!-- Bibliothèque Supabase, configuration, puis script de la page -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
     <script src="js/script.js"></script>

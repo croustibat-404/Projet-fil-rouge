@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="page_parametres">
+    <!-- Retour à l'accueil -->
     <a href="index.html" class="bouton_quitter" title="Retour à l'accueil"><i class="fa-solid fa-arrow-left"></i></a>
 
     <main class="parametres">
@@ -26,6 +27,7 @@
             </div>
 
             <p class="titre_choix_avatar">Choisissez un avatar :</p>
+            <!-- Avatars proposés -->
             <div class="choix_avatars" id="choix_avatars">
                 <button type="button" class="avatar_propose" aria-label="Avatar 1" aria-pressed="false">
                     <img src="https://api.dicebear.com/9.x/fun-emoji/svg?seed=Felix" alt="">
@@ -143,6 +145,7 @@
         </div>
     </dialog>
 
+    <!-- Bibliothèque Supabase, configuration, puis script de la page -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
     <script src="js/script.js"></script>

@@ -1,6 +1,6 @@
 # Projet Fil Rouge – Messagerie en ligne 
 
-Projet réalisé dans le cadre du cours 8WEB101
+Projet réalisé dans le cours 8WEB101
 
 ## Binôme
 
@@ -18,7 +18,7 @@ L'objectif du projet est de concevoir une application de messagerie en ligne per
 - gérer leurs contacts ;
 - modifier leur profil et choisir un avatar.
 
-Les comptes, les conversations et les messages sont stockés avec Supabase.
+Les comptes, les conversations et les messages sont stockés avec Supabase. Les nouveaux messages s'affichent en direct, sans recharger la page.
 
 ## Pages réalisées
 
@@ -42,6 +42,10 @@ Projet-Fil-Rouge/
 ├── js/
 │   ├── supabase.js    # Connexion à Supabase
 │   └── script.js      # Script commun à toutes les pages
+├── sql/               # Scripts de la base de données (à exécuter dans l'ordre)
+│   ├── 01_schema_simple.sql
+│   ├── 02_stories.sql
+│   └── 03_final.sql
 ├── img/
 │   └── logo.png       # Logo / favicon
 └── README.md
@@ -49,12 +53,9 @@ Projet-Fil-Rouge/
 
 ## Fonction supplémentaire : les storys
 
-Nous avons ajouté la possibilité de publier des storys, visibles par tout le monde.
+Nous avons ajouté la possibilité de publier des storys (photos ou vidéos), visibles par les contacts pendant 24 heures.
 
-- **Publier une story** : cliquer sur le petit **+** sur son avatar en haut à gauche, choisir une image (PNG, JPG ou WEBP, 5 Mo max) puis ajouter une légende si on veut.
+- **Publier une story** : cliquer sur le petit **+** sur son avatar en haut à gauche, choisir une image (PNG, JPG ou WEBP, 5 Mo max) ou une vidéo (MP4 ou WEBM, 20 Mo max), puis ajouter une légende si on veut.
 - **Voir une story** : dans l'onglet Contacts, les contacts qui ont une story ont un cercle bleu autour de leur photo. Il faut cliquer sur la photo pour ouvrir la story. Le cercle devient gris une fois la story vue.
-- **Dans la story** : les storys défilent toutes seules, on clique à droite pour passer à la suivante, à gauche pour revenir en arrière, et on maintient le clic pour mettre en pause. Échap ou la croix pour fermer.
-
-## Lancer le projet
-
-Aucune installation n'est nécessaire : il suffit d'ouvrir [connexion.html](connexion.html) dans un navigateur web (une connexion internet est nécessaire pour Supabase).
+- **Voir sa propre story** : un cercle bleu apparaît autour de son avatar, un clic l'ouvre.
+- **Dans la story** : les storys défilent toutes seules (une vidéo dure le temps de la vidéo), on clique à droite pour passer à la suivante, à gauche pour revenir en arrière, et on maintient le clic pour mettre en pause. Échap ou la croix pour fermer.
