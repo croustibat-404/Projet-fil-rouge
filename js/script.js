@@ -1048,6 +1048,7 @@ async function chargerMesInfos() {
 
     if (monAvatar) {
         monAvatar.title = infos.pseudo || "";
+        document.getElementById("mon_pseudo").textContent = infos.pseudo || "";
 
         if (infos.avatar) {
             const image = document.createElement("img");
