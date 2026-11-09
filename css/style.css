@@ -959,16 +959,19 @@ input[type="submit"]:disabled {
 }
 
 /* Cercle autour de l'avatar quand le contact a une story */
-.avatar_contact.a_story {
+.avatar_contact.a_story,
+.petit_avatar.a_story {
     box-shadow: 0 0 0 2px white, 0 0 0 4px rgb(0, 217, 255);
     cursor: pointer;
 }
 
-.avatar_contact.a_story:hover {
+.avatar_contact.a_story:hover,
+.petit_avatar.a_story:hover {
     transform: scale(1.08);
 }
 
-.avatar_contact.a_story.story_vue {
+.avatar_contact.a_story.story_vue,
+.petit_avatar.a_story.story_vue {
     box-shadow: 0 0 0 2px white, 0 0 0 4px #bbb;
 }
 

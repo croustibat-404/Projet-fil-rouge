@@ -2,6 +2,12 @@
 const message = document.getElementById("message");
 // Id de la conversation ouverte (null si aucune)
 let conversationActive = null;
+// Personne avec qui on discute (pseudo, avatar, stories)
+let personneDiscussion = null;
+// Conversations affichées à gauche
+let listeConversations = [];
+// Ids des personnes dont on a déjà vu la story (cercle gris)
+let storiesVues = [];
 
 // Message en rouge
 function afficherErreur(texte) {
@@ -135,12 +141,33 @@ async function infosProfil(id) {
     return reponse.data[0];
 }
 
+// Stories de moins de 24 h d'un utilisateur, prêtes pour le lecteur
+async function storiesDe(id) {
+    const { data, error } = await supabaseClient
+        .from("stories")
+        .select("*")
+        .eq("user_id", id)
+        .gte("created_at", limiteStories())
+        .order("created_at", { ascending: true });
+    if (error) {
+        console.error("Erreur lors de la récupération des stories :", error);
+        return [];
+    }
+    return convertirStories(data);
+}
+
 // Ouvre une conversation : en-tête, sélection, saisie, messages
-async function ouvrirConversation(conversationId, pseudo, avatar) {
+// personne : { id, pseudo, avatar, stories }
+async function ouvrirConversation(conversationId, personne) {
     conversationActive = conversationId;
+    personneDiscussion = personne;
     const entete = document.querySelector(".nom_contact");
-    entete.textContent = pseudo;
-    remplirAvatar(document.getElementById("avatar_discussion"), pseudo, avatar);
+    entete.textContent = personne.pseudo;
+
+    const avatarDiscussion = document.getElementById("avatar_discussion");
+    remplirAvatar(avatarDiscussion, personne.pseudo, personne.avatar);
+    marquerStory(avatarDiscussion, personne);
+
     for (let conv of document.querySelectorAll(".conversation")) {
         conv.classList.remove("conversation_active");
     }
@@ -186,20 +213,31 @@ async function chargerConversations() {
             console.warn("Aucun autre membre trouvé pour la conversation :", conv.conversation_id);
             continue;
         }
-        const profil = await infosProfil(dataConversation[0].user_id);
+        const autreId = dataConversation[0].user_id;
+        const profil = await infosProfil(autreId);
         if (profil === null) {
             continue;
         }
 
-        resultats.push({ id: conv.conversation_id, pseudo: profil.pseudo, avatar: profil.avatar });
+        resultats.push({
+            id: conv.conversation_id,
+            personne: {
+                id: autreId,
+                pseudo: profil.pseudo,
+                avatar: profil.avatar,
+                stories: await storiesDe(autreId)
+            }
+        });
     }
+
+    listeConversations = resultats;
 
     // On vide puis on remplit d'un coup : pas de doublons si deux chargements se chevauchent
     liste_conv.textContent = "";
     for (let conv of resultats) {
         const conversation = document.createElement("li");
         conversation.addEventListener("click", function () {
-            ouvrirConversation(conv.id, conv.pseudo, conv.avatar);
+            ouvrirConversation(conv.id, conv.personne);
         });
         conversation.classList.add("conversation");
         conversation.id = "conv-" + conv.id;
@@ -209,10 +247,18 @@ async function chargerConversations() {
 
         const avatar = document.createElement("div");
         avatar.classList.add("petit_avatar");
-        remplirAvatar(avatar, conv.pseudo, conv.avatar);
+        remplirAvatar(avatar, conv.personne.pseudo, conv.personne.avatar);
+
+        // Cliquer sur la photo ouvre la story au lieu de la conversation
+        if (marquerStory(avatar, conv.personne)) {
+            avatar.addEventListener("click", function (event) {
+                event.stopPropagation();
+                voirStory(conv.personne);
+            });
+        }
 
         const span = document.createElement("span");
-        span.textContent = conv.pseudo;
+        span.textContent = conv.personne.pseudo;
 
         conversation.appendChild(avatar);
         conversation.appendChild(span);
@@ -608,7 +654,13 @@ if (boutonConversation) {
         }
 
         await chargerConversations();
-        await ouvrirConversation(idConv, pseudo);
+        let personne = { id: autreId, pseudo: pseudo };
+        for (let conv of listeConversations) {
+            if (conv.id === idConv) {
+                personne = conv.personne;
+            }
+        }
+        await ouvrirConversation(idConv, personne);
     });
 }
 
@@ -672,6 +724,41 @@ function remplirAvatar(element, pseudo, avatar) {
     }
 }
 
+// Ajoute le cercle autour de l'avatar si la personne a une story (renvoie vrai dans ce cas)
+function marquerStory(element, personne) {
+    const aStory = Boolean(personne.stories && personne.stories.length > 0);
+    element.classList.toggle("a_story", aStory);
+    element.classList.toggle("story_vue", aStory && storiesVues.includes(personne.id));
+    element.title = aStory ? "Voir la story de " + personne.pseudo : "";
+    element.dataset.story = personne.id;
+    return aStory;
+}
+
+// Ouvre la story et passe le cercle en gris partout où la personne apparaît
+function voirStory(personne) {
+    if (!personne.stories || personne.stories.length === 0) {
+        return;
+    }
+    if (!storiesVues.includes(personne.id)) {
+        storiesVues.push(personne.id);
+    }
+    for (let element of document.querySelectorAll('[data-story="' + personne.id + '"].a_story')) {
+        element.classList.add("story_vue");
+    }
+    ouvrirStory(personne, personne.stories);
+}
+
+// Cliquer sur l'avatar en haut de la discussion ouvre la story de la personne
+const avatarDiscussion = document.getElementById("avatar_discussion");
+
+if (avatarDiscussion) {
+    avatarDiscussion.addEventListener("click", function () {
+        if (personneDiscussion !== null) {
+            voirStory(personneDiscussion);
+        }
+    });
+}
+
 // Construit la ligne HTML d'un contact
 function creerLigneContact(contact) {
     const ligne = document.createElement("li");
@@ -686,16 +773,10 @@ function creerLigneContact(contact) {
     remplirAvatar(avatar, contact.pseudo, contact.avatar);
 
     // Cliquer sur la photo d'un contact qui a une story l'ouvre
-    if (contact.stories && contact.stories.length > 0) {
-        avatar.classList.add("a_story");
-        avatar.classList.toggle("story_vue", contact.storyVue === true);
-        avatar.title = "Voir la story de " + contact.pseudo;
-
+    if (marquerStory(avatar, contact)) {
         avatar.addEventListener("click", function (event) {
             event.stopPropagation();
-            contact.storyVue = true;
-            avatar.classList.add("story_vue");
-            ouvrirStory(contact, contact.stories);
+            voirStory(contact);
         });
     }
 
@@ -917,24 +998,7 @@ async function chargerContacts() {
         if (statut === "en_attente") {
             personne.enAttente = true;
         } else {
-            const { data: dataStories, error: errorStories } = await supabaseClient
-                .from("stories")
-                .select("*")
-                .eq("user_id", autreId)
-                .gte("created_at", limiteStories())
-                .order("created_at", { ascending: true });
-            if (errorStories) {
-                console.error("Erreur lors de la récupération des stories :", errorStories);
-            } else {
-                personne.stories = convertirStories(dataStories);
-            }
-
-            // On garde le cercle gris si la story avait déjà été vue
-            for (let ancien of listeDeContacts) {
-                if (ancien.id === autreId && ancien.storyVue) {
-                    personne.storyVue = true;
-                }
-            }
+            personne.stories = await storiesDe(autreId);
         }
         nouvelleListe.push(personne);
     }
