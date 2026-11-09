@@ -634,6 +634,7 @@ for (let onglet of onglets) {
 
 // ---------- Contacts ----------
 let listeDeContacts = [];
+let demandesRecues = [];
 
 const listeContactsHTML = document.getElementById("liste_contacts");
 const rechercheContact = document.getElementById("recherche_contact");
@@ -750,6 +751,21 @@ function afficherContacts() {
         });
 
     listeContactsHTML.textContent = "";
+
+    // Les demandes reçues en haut de la liste
+    if (demandesRecues.length > 0) {
+        const titre = document.createElement("li");
+        titre.classList.add("lettre_contact");
+        titre.textContent = "Demandes reçues";
+        listeContactsHTML.appendChild(titre);
+
+        for (let demande of demandesRecues) {
+            listeContactsHTML.appendChild(creerLigneDemande(demande));
+        }
+    }
+    document.getElementById("nombre_demandes").textContent =
+        demandesRecues.length > 0 ? " (" + demandesRecues.length + ")" : "";
+
     let lettreActuelle = "";
 
     for (let contact of contactsFiltres) {
@@ -789,61 +805,46 @@ afficherContacts();
 // ---------- Demandes d'ami ----------
 // Une ligne de la table contacts = une relation entre deux personnes :
 // user_id a envoyé la demande à contact_id, statut "en_attente" puis "accepte"
-let demandesRecues = [];
 
-const zoneDemandes = document.getElementById("demandes_amis");
-const listeDemandes = document.getElementById("liste_demandes");
-const badgeDemandes = document.getElementById("badge_demandes");
+// Ligne d'une demande reçue, avec les boutons Accepter / Refuser
+function creerLigneDemande(demande) {
+    const ligne = document.createElement("li");
+    ligne.classList.add("contact");
 
-// Affiche les demandes reçues et le nombre sur l'onglet Contacts
-function afficherDemandes() {
-    if (!zoneDemandes) {
-        return;
-    }
+    const infos = document.createElement("div");
+    infos.classList.add("contact_principal");
 
-    listeDemandes.textContent = "";
-    for (let demande of demandesRecues) {
-        const ligne = document.createElement("li");
-        ligne.classList.add("demande");
+    const avatar = document.createElement("span");
+    avatar.classList.add("avatar_contact");
+    remplirAvatar(avatar, demande.pseudo, demande.avatar);
 
-        const avatar = document.createElement("span");
-        avatar.classList.add("avatar_contact");
-        remplirAvatar(avatar, demande.pseudo, demande.avatar);
+    const nom = document.createElement("span");
+    nom.classList.add("contact_nom");
+    nom.textContent = demande.pseudo;
 
-        const nom = document.createElement("span");
-        nom.classList.add("demande_nom");
-        nom.textContent = demande.pseudo;
+    infos.appendChild(avatar);
+    infos.appendChild(nom);
+    ligne.appendChild(infos);
 
-        const accepter = document.createElement("button");
-        accepter.type = "button";
-        accepter.classList.add("demande_accepter");
-        accepter.title = "Accepter";
-        accepter.setAttribute("aria-label", "Accepter la demande de " + demande.pseudo);
-        accepter.innerHTML = '<i class="fa-solid fa-check"></i>';
-        accepter.addEventListener("click", function () {
-            repondreDemande(demande, true);
-        });
+    const accepter = document.createElement("button");
+    accepter.type = "button";
+    accepter.classList.add("bouton_demande");
+    accepter.textContent = "Accepter";
+    accepter.addEventListener("click", function () {
+        repondreDemande(demande, true);
+    });
 
-        const refuser = document.createElement("button");
-        refuser.type = "button";
-        refuser.classList.add("demande_refuser");
-        refuser.title = "Refuser";
-        refuser.setAttribute("aria-label", "Refuser la demande de " + demande.pseudo);
-        refuser.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-        refuser.addEventListener("click", function () {
-            repondreDemande(demande, false);
-        });
+    const refuser = document.createElement("button");
+    refuser.type = "button";
+    refuser.classList.add("bouton_demande");
+    refuser.textContent = "Refuser";
+    refuser.addEventListener("click", function () {
+        repondreDemande(demande, false);
+    });
 
-        ligne.appendChild(avatar);
-        ligne.appendChild(nom);
-        ligne.appendChild(accepter);
-        ligne.appendChild(refuser);
-        listeDemandes.appendChild(ligne);
-    }
-
-    zoneDemandes.hidden = demandesRecues.length === 0;
-    badgeDemandes.hidden = demandesRecues.length === 0;
-    badgeDemandes.textContent = demandesRecues.length;
+    ligne.appendChild(accepter);
+    ligne.appendChild(refuser);
+    return ligne;
 }
 
 // Accepte (accepter = true) ou refuse une demande reçue
@@ -941,7 +942,6 @@ async function chargerContacts() {
     listeDeContacts = nouvelleListe;
     demandesRecues = nouvellesDemandes;
     afficherContacts();
-    afficherDemandes();
 }
 
 // Temps réel : recharge les contacts quand une demande arrive ou est acceptée

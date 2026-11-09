@@ -1409,100 +1409,20 @@ input[type="submit"]:disabled {
 
 /* --- Demandes d'ami --- */
 
-.badge_demandes {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 5px;
-    border-radius: 9px;
-    background-color: #d93025;
-    color: white;
-    font-size: 0.7rem;
-}
-
-.badge_demandes[hidden],
-.demandes_amis[hidden] {
-    display: none;
-}
-
-.demandes_amis {
-    flex-shrink: 0;
-    margin: 12px 12px 0;
-    padding: 8px 10px;
-    border: 1px solid #cfe2ff;
-    border-radius: 8px;
-    background-color: #f0f7ff;
-}
-
-.titre_demandes {
-    margin: 0 0 6px;
+.bouton_demande {
+    margin-right: 6px;
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    font-family: inherit;
     font-size: 0.8rem;
-    font-weight: bold;
-    color: #000680;
-}
-
-.liste_demandes {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.demande {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.demande .avatar_contact {
-    width: 30px;
-    height: 30px;
-    font-size: 0.7rem;
-}
-
-.demande_nom {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 0.9rem;
-    font-weight: bold;
-}
-
-.demande_accepter,
-.demande_refuser {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 28px;
-    height: 28px;
-    padding: 0;
-    border: none;
-    border-radius: 50%;
-    color: white;
     cursor: pointer;
     flex-shrink: 0;
 }
 
-.demande_accepter {
-    background-color: #2ecc71;
-}
-
-.demande_accepter:hover {
-    background-color: #27ae60;
-}
-
-.demande_refuser {
-    background-color: #d93025;
-}
-
-.demande_refuser:hover {
-    background-color: #b3261e;
+.bouton_demande:hover {
+    background-color: #e6f2fa;
 }
 
 /* Demande envoyée mais pas encore acceptée */

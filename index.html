@@ -33,8 +33,7 @@
                 </button>
                 <button type="button" class="onglet" id="onglet_contacts" role="tab"
                         aria-selected="false" aria-controls="panneau_contacts" data-onglet="contacts">
-                    <i class="fa-solid fa-address-book"></i> Contacts
-                    <span class="badge_demandes" id="badge_demandes" title="Demandes d'ami reçues" hidden></span>
+                    <i class="fa-solid fa-address-book"></i> Contacts<span id="nombre_demandes"></span>
                 </button>
             </div>
 
@@ -47,11 +46,6 @@
 
             <!-- ===== Panneau Contacts ===== -->
             <div class="panneau" id="panneau_contacts" role="tabpanel" aria-labelledby="onglet_contacts" hidden>
-                <!-- Demandes d'ami reçues (cachées s'il n'y en a pas) -->
-                <div class="demandes_amis" id="demandes_amis" hidden>
-                    <p class="titre_demandes">Demandes d'ami reçues</p>
-                    <ul class="liste_demandes" id="liste_demandes"></ul>
-                </div>
                 <div class="recherche_contact">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="search" id="recherche_contact" placeholder="Rechercher…"
